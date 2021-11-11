@@ -1,0 +1,2 @@
+
+__logger__ = None;
