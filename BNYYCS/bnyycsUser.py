@@ -1,5 +1,5 @@
 
-__logger__ = None;
+from .bnyycsLog import logger;
 
 #CHAR_TYPE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=~!@#$%^&*()_+[]{}<>,.;:\|/?`";
 #CHAR_CMD = "\r\n\t\b\x7F\x03\x1B\x1B[A\x1B[B\x1B[D\x1B[C";

@@ -5,7 +5,7 @@ import socket;
 from . import bnyycsUser as User;
 from . import bnyycsRes as Res;
 
-__logger__ = None;
+from .bnyycsLog import logger;
 
 
 
@@ -25,14 +25,14 @@ class BNYYCS:
 
         class context:
             def __enter__(context):
-                __logger__.debug('__enter__');
+                logger.debug('__enter__');
                 while True:
                     self.update();
                     yield 0;
             
             def __exit__(context, type, value, trace):
                 self.close();
-                __logger__.debug('__exit__');
+                logger.debug('__exit__');
 
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM);

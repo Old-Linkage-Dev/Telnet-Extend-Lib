@@ -1,2 +1,2 @@
 
-__logger__ = None;
+from .bnyycsLog import logger;
