@@ -1,10 +1,5 @@
 
 import logging as __logging__;
-from . import bnyycsMain as __bnyycs_main__;
-from . import bnyycsUser as __bnyycs_user__;
-from . import bnyycsRes as __bnyycs_res__;
-
-
 
 VERSION = 'v20211111';
 
@@ -21,6 +16,10 @@ __bnyycs_user__.__logger__ = __logger__;
 __bnyycs_res__.__logger__ = __logger__;
 
 
+
+from . import bnyycsMain as __bnyycs_main__;
+from . import bnyycsUser as __bnyycs_user__;
+from . import bnyycsRes as __bnyycs_res__;
 
 __all__ = (
 );
