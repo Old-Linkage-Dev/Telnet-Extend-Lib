@@ -42,6 +42,8 @@ class BNYYCS:
         return context();
     
     def close(self):
+        for t, address, connection, user in self.pool:
+            connection.shutdown(socket.SHUT_RDWR);
         self.server.close();
     
     def update(self):
