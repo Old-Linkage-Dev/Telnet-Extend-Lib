@@ -19,8 +19,10 @@ __logger__.info('Running...');
 import BNYYCS;
 
 serv = BNYYCS.__bnyycs_main__.BNYYCS(host = "localhost");
-with serv.open() as updates:
-    for x in updates:
-        pass;
-    
-print('end');
+try:
+    with serv.open() as updates:
+        for update in updates:
+            if update:
+                __logger__.debug(update);
+except:
+    __logger__.info('Ended.');
