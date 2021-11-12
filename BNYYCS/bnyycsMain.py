@@ -9,6 +9,16 @@ from .bnyycsLog import logger;
 
 
 
+# BNYYCS([host], [port], [backlog], [maxidle])      // 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
+#   host        : str                               // 网站地址；
+#   port        : int                               // 网站端口，默认为telnet的23端口；
+#   backlog     : int                               // 同时接入的最大连接数；
+#   maxidle     : float                             // 单个用户的最大空闲，超时下线；
+
+# .open()       : iter + context                    // 开启网站服务，返回一个迭代器表示每轮update，可以通过with的上下文形式访问；
+# .close()      : none                              // 关闭网站服务；
+# .update()     : update                            // 单次update的调用，概念上返回本次update的信息，未实现；
+
 class BNYYCS:
 
     def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, maxidle = 300) -> None:
