@@ -34,15 +34,19 @@ class BNYYCS:
     def open(self):
 
         class context:
+
             def __enter__(context):
                 logger.debug('__enter__');
-                while True:
-                    self.update();
-                    yield 0;
+                return context;
             
             def __exit__(context, type, value, trace):
                 self.close();
                 logger.debug('__exit__');
+                return;
+            
+            def __iter__(context):
+                while True:
+                    yield self.update();
 
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
