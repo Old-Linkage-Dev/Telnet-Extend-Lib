@@ -41,12 +41,10 @@ class BNYYCS:
         class context:
 
             def __enter__(context):
-                logger.debug('__enter__');
                 return context;
             
             def __exit__(context, type, value, trace):
                 self.close();
-                logger.debug('__exit__');
                 return;
             
             def __iter__(context):
