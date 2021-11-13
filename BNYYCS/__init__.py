@@ -1,8 +1,9 @@
 
-from . import bnyycsMain as __bnyycs_main__;
-from . import bnyycsUser as __bnyycs_user__;
-from . import bnyycsRes as __bnyycs_res__;
-from . import bnyycsLog as __bnyycs_log__;
+from . import bnyycsMain as _bnyycs_main;
+from . import bnyycsShell as _bnyyce_shell;
+from . import bnyycsUser as _bnyycs_user;
+from . import bnyycsRes as _bnyycs_res;
+from . import bnyycsLog as _bnyycs_log;
 from .bnyycsLog import logger;
 
 
