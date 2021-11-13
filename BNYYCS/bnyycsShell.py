@@ -28,12 +28,16 @@ class Shell_BNYYCE(threading.Thread):
         self.maxidle = maxidle;
         self.user = User.User();
         self.timestamp = time.time();
+        self._stop = False;
         return;
+    
+    def stop(self) -> None:
+        self._stop = True;
     
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
         try:
-            while time.time() - self.timestamp <= self.maxidle:
+            while time.time() - self.timestamp <= self.maxidle and not self._stop:
                 try:
                     recv = self.conn.recv(4096);
                 except BlockingIOError or TimeoutError:
@@ -77,8 +81,12 @@ class Shell_Caster(threading.Thread):
         self.timestart = time.time();
         self.proc = None;
         self.pipe = None;
+        self._stop = False;
         return;
 
+    def stop(self) -> None:
+        self._stop = True;
+    
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
         try:
@@ -100,7 +108,7 @@ class Shell_Caster(threading.Thread):
             return;
         try:
             s = b'\x00';
-            while time.time() - self.timestart <= self.timeout and self.proc.poll() == None and s != b'':
+            while time.time() - self.timestart <= self.timeout and self.proc.poll() == None and s != b'' and not self._stop:
                 s = self.pipe.read(1);
                 self.conn.send(s);
             self.conn.shutdown(socket.SHUT_RDWR);
