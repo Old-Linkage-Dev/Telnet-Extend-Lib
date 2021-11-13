@@ -1,9 +1,9 @@
 
 # -*- coding: UTF-8 -*-
 
-import time;
-
 import socket;
+
+from . import bnyycsShell as Shell;
 from . import bnyycsUser as User;
 from . import bnyycsRes as Res;
 
@@ -11,11 +11,12 @@ from .bnyycsLog import logger;
 
 
 
-# BNYYCS([host], [port], [backlog], [maxidle])      // 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
+# BNYYCS([host], [port], [backlog], **kargs)        // 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
 #   host        : str                               // 网站地址；
 #   port        : int                               // 网站端口，默认为telnet的23端口；
-#   backlog     : int                               // 同时接入的最大连接数；
-#   maxidle     : float                             // 单个用户的最大空闲，超时下线；
+#   backlog     : int                               // 网站同时接入的最大连接数；
+#   block       : bool                              // 网站是否阻塞性等待连接；
+#   **kargs     : **kargs                           // 其他参数，传递至各个Shell类；
 
 # .open()       : iter + context                    // 开启网站服务，返回一个迭代器表示每轮update，可以通过with的上下文形式访问；
 # .close()      : none                              // 关闭网站服务；
@@ -23,11 +24,13 @@ from .bnyycsLog import logger;
 
 class BNYYCS:
 
-    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, maxidle = 300) -> None:
+    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, block = True, shellclass = Shell.Shell_BNYYCE, **kwargs) -> None:
         self.host = host;
         self.port = port;
         self.backlog = backlog;
-        self.maxidle = maxidle;
+        self.block = block;
+        self.shellclass = shellclass;
+        self.kwargs = kwargs;
 
         self.server = None;
         self.pool = [];
@@ -52,48 +55,54 @@ class BNYYCS:
 
 
         self.server = socket.socket(socket.AF_INET, socket.SOCK_STREAM);
-        self.server.setblocking(False);
+        self.server.setblocking(self.block);
         self.server.bind((self.host, self.port));
         self.server.listen(self.backlog);
         return context();
     
     def close(self):
-        for t, address, connection, user in self.pool:
-            connection.shutdown(socket.SHUT_RDWR);
+        for address, connection, shell in self.pool:
+            if shell.is_alive():
+                shell.stop();
+        for address, connection, shell in self.pool:
+            try:
+                if shell.is_alive():
+                    shell.join(timeout = 5);
+            except:
+                continue;
+        for address, connection, shell in self.pool:
+            try:
+                if not connection._closed:
+                    connection.shutdown(socket.SHUT_RDWR);
+            except:
+                continue;
+        for address, connection, shell in self.pool:
+            try:
+                if not connection._closed:
+                    connection.close();
+            except:
+                continue;
         self.server.close();
     
     def update(self):
         try:
-            connection, address = self.server.accept();
-            connection.setblocking(False);
-            user = User.User();
-            t = time.time();
-            conn = (t, address, connection, user);
-            self.pool.append(conn);
+            if len(self.pool) < self.backlog:
+                connection, address = self.server.accept();
+                shell = self.shellclass(conn = connection, **self.kwargs);
+                user = (address, connection, shell);
+                self.pool.append(user);
+                logger.info('New user [%s] @%s:%d.' % (shell.name, *address));
+            else:
+                connection, address = self.server.accept();
+                self.server.close();
+                logger.info('New connection refused @%s:%d.' % address);
         except BlockingIOError:
             pass;
         
         pool = [];
-        for t, address, connection, user in self.pool:
-            try:
-                recv = connection.recv(4096);
-            except BlockingIOError:
-                recv = None;
-            if recv and user.update(recv):
-                try:
-                    connection.send(user.page);
-                    connection.send(user.line);
-                    t = time.time();
-                    conn = (t, address, connection, user);
-                    pool.append(conn);
-                except:
-                    connection.close();
-            elif time.time() - t <= self.maxidle:
-                conn = (t, address, connection, user);
-                pool.append(conn);
+        for address, connection, shell in self.pool:
+            if shell.is_alive():
+                pool.append(address, connection, shell);
             else:
-                connection.shutdown(socket.SHUT_RDWR);
+                logger.info('Removed user [%s] @%s:%d.' % (shell.name, *address));
         self.pool = pool;
-        
-        
-        
