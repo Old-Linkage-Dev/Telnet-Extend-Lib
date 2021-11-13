@@ -1,4 +1,6 @@
 
+# -*- coding: UTF-8 -*-
+
 from .bnyycsLog import logger;
 
 #CHAR_TYPE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=~!@#$%^&*()_+[]{}<>,.;:\|/?`";
