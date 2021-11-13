@@ -16,6 +16,8 @@ logger.info('Running...');
 
 
 
+import traceback;
+import time;
 import BNYYCS;
 
 # 初始化BNYYCS模块
@@ -23,11 +25,14 @@ import BNYYCS;
 # open可使用with进行
 # 开始轮询和
 
-serv = BNYYCS.__bnyycs_main__.BNYYCS(host = "localhost");
+serv = BNYYCS.BNYYCS(host = "localhost");
 try:
     with serv.open() as updates:
         for update in updates:
+            time.sleep(0.5);
             if update:
                 logger.debug(update);
-except:
-    logger.info('Ended.');
+except Exception as err:
+    logger.error(err);
+    logger.debug(traceback.format_exc());
+    logger.critical('Main Loop run into an exception.');
