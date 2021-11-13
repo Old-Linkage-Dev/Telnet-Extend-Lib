@@ -3,7 +3,7 @@
 
 import logging;
 
-logger = logging.getLogger(__name__);
+logger = logging.getLogger("BNYYCS");
 logger.setLevel(logging.DEBUG);
 _logger_ch = logging.StreamHandler();
 _logger_ch.setLevel(logging.DEBUG);
