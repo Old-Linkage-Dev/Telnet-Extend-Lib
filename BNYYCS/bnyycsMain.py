@@ -89,6 +89,7 @@ class BNYYCS:
                 shell = self.shellclass(conn = connection, **self.kwargs);
                 user = (address, connection, shell);
                 self.pool.append(user);
+                shell.start();
                 logger.info('New user [%s] @%s:%d.' % (shell.name, *address));
             else:
                 connection, address = self.server.accept();
@@ -100,7 +101,7 @@ class BNYYCS:
         pool = [];
         for address, connection, shell in self.pool:
             if shell.is_alive():
-                pool.append(address, connection, shell);
+                pool.append((address, connection, shell));
             else:
                 logger.info('Removed user [%s] @%s:%d.' % (shell.name, *address));
         self.pool = pool;
