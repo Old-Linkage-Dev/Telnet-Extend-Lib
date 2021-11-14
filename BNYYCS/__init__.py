@@ -6,21 +6,20 @@ from . import bnyycsRes as _bnyycs_res;
 from . import bnyycsLog as _bnyycs_log;
 
 from .bnyycsLog import logger;
-from .bnyycsMain import BNYYCS;
-from .bnyycsShell import Shell_BNYYCE;
-from .bnyycsShell import Shell_Interactor;
-from .bnyycsShell import Shell_Caster;
-from .bnyycsUser import User;
+from .bnyycsMain import *;
+from .bnyycsShell import *;
+from .bnyycsShell import *;
+from .bnyycsShell import *;
+from .bnyycsUser import *;
 
 
 
-__all__ = [
-    "BNYYCS",
-    "Shell_BNYYCE",
-    "Shell_Interactor",
-    "Shell_Caster",
-    "User"
-];
+__all__ = (
+    _bnyycs_main.__all__
+  + _bnyyce_shell.__all__
+  + _bnyycs_user.__all__
+  + _bnyycs_res.__all__
+);
 
 __author__ = "Tarcadia, Mundanity-fc";
 __url__ = u"https://github.com/Tarcadia/Prototype.BNYYCS/";
