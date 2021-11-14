@@ -11,6 +11,7 @@ from . import bnyycsUser as User;
 from . import bnyycsRes as Res;
 
 from .bnyycsLog import logger;
+from .bnyyceCtrl import *;
 
 
 
@@ -98,7 +99,7 @@ class Shell_Interactor(threading.Thread):
         class subinput(threading.Thread):
             def run(subinput):
                 try:
-                    r = b'\x00';
+                    r = CHR_NUL;
                     while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and r != b'' and not self._flagstop:
                         try:
                             r = self.conn.recv(4096);
@@ -148,7 +149,7 @@ class Shell_Interactor(threading.Thread):
         try:
             self._subinput = subinput(name = self.name + '_subinput');
             self._subinput.start();
-            s = b'\x00';
+            s = CHR_NUL;
             while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._flagstop:
                 s = self.pipeout.read(1);
                 self.conn.send(s);
@@ -231,7 +232,7 @@ class Shell_Caster(threading.Thread):
             logger.debug(traceback.format_exc());
             return;
         try:
-            s = b'\x00';
+            s = CHR_NUL;
             while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._flagstop:
                 s = self.pipe.read(1);
                 self.conn.send(s);
