@@ -67,7 +67,7 @@ class Res_RefusePage(Resource):
         return;
 
     def draw(self, tab):
-        _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...';
+        _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...' if self.reason else b'NO REASON PRESENTED';
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _midwords = bytes(_reason, 'ascii');
