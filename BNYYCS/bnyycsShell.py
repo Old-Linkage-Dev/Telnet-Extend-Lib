@@ -79,7 +79,7 @@ class Shell_Refuse(threading.Thread):
         _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...';
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
-        _midwords = bytes(_reason, 'ascii')
+        _midwords = bytes(_reason, 'ascii');
         return b''.join([
         CHR_CLR,
         b'#==============================================================================#' + CHR_CRLF,
