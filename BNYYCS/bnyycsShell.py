@@ -58,6 +58,7 @@ class Shell_BNYYCE(threading.Thread):
         except Exception as err:
             self.conn.close();
             logger.error(err);
+            logger.critical('User [%s] shell failed.' % self.name);
             logger.debug(traceback.format_exc());
             logger.critical('User [%s] shell failed.' % self.name);
         return;
@@ -103,8 +104,8 @@ class Shell_Caster(threading.Thread):
             self.proc = None;
             self.pipe = None;
             logger.error(err);
-            logger.debug(traceback.format_exc());
             logger.critical('User [%s] shell failed starting.');
+            logger.debug(traceback.format_exc());
             return;
         try:
             s = b'\x00';
@@ -125,7 +126,7 @@ class Shell_Caster(threading.Thread):
             self.pipe.close();
             self.proc.kill();
             logger.error(err);
-            logger.debug(traceback.format_exc());
             logger.critical('User [%s] shell failed.');
+            logger.debug(traceback.format_exc());
         logger.info('User [%s] ended.' % self.name);
         return;
