@@ -108,7 +108,7 @@ class Shell_Caster(threading.Thread):
             return;
         try:
             s = b'\x00';
-            while time.time() - self.timestart <= self.timeout and self.proc.poll() == None and s != b'' and not self._stop:
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._stop:
                 s = self.pipe.read(1);
                 self.conn.send(s);
             self.conn.shutdown(socket.SHUT_RDWR);
