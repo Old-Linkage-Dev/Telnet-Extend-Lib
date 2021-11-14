@@ -93,7 +93,9 @@ class BNYYCS:
                 logger.info('New user [%s] @%s:%d.' % (shell.name, *address));
             else:
                 connection, address = self.server.accept();
-                self.server.close();
+                shell = Shell.Shell_Refuse(conn = connection, reason = 'Fully Connected');
+                shell.run();
+                connection.close();
                 logger.info('New connection refused @%s:%d.' % address);
         except BlockingIOError:
             pass;

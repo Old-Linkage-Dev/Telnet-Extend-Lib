@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 
 import time;
+import math;
 import threading;
 import subprocess;
 import traceback;
@@ -61,6 +62,72 @@ class Shell_BNYYCE(threading.Thread):
             logger.error(err);
             logger.critical('User [%s] shell failed.' % self.name);
             logger.debug(traceback.format_exc());
+        return;
+
+
+
+# Shell_Refuse(conn, [name], [reason])                  // 单个用户的标准Refuse型shell控制线程，向用户展示被拒绝访问的信息；
+#                                                       // 该Shell应当是短暂快速轻量的处理信息，并且应当可被视作不具有时间上的开销的；
+#   conn        : socket                                // 该用户的socket连接；
+#   name        : str                                   // 该用户的线程名称；
+#   reason      : str                                   // 该用户的拒绝理由；
+
+class Shell_Refuse(threading.Thread):
+
+    @property
+    def _page(self):
+        _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...';
+        _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
+        _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
+        _midwords = bytes(_reason, 'ascii')
+        return b''.join([
+        CHR_CLR,
+        b'#==============================================================================#' + CHR_CRLF,
+        b'| CONNECTION INFORMATION                                                       |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'| The atempt to visit this site is refused,                                    |' + CHR_CRLF,
+        b'| The reason to the rufusing is:                                               |' + CHR_CRLF,
+        b'|   '                  + _lspace + _midwords + _rspace +                  b'   |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                                              |' + CHR_CRLF,
+        b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |' + CHR_CRLF,
+        b'#==============================================================================#' + CHR_CRLF,
+        CHRf_CSI_CUP(8, 3)
+        ]);
+    
+    def __init__(self, conn, name = '', reason = '') -> None:
+        super().__init__();
+        self.conn = conn;
+        self.name = name if name else hex(id(self));
+        self.reason = reason;
+        return;
+    
+    def stop(self) -> None:
+        return;
+    
+    def run(self) -> None:
+        logger.info('User [%s] refusing...' % self.name);
+        try:
+            self.conn.send(self._page);
+        except Exception as err:
+            logger.error(err);
+            logger.error('User [%s] refusing error.' % self.name);
+            logger.debug(traceback.format_exc());
+        self.conn.close();
         return;
 
 
