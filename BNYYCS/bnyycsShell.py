@@ -29,16 +29,16 @@ class Shell_BNYYCE(threading.Thread):
         self.maxidle = maxidle;
         self.user = User.User();
         self.timestamp = time.time();
-        self._stop = False;
+        self._flagstop = False;
         return;
     
     def stop(self) -> None:
-        self._stop = True;
+        self._flagstop = True;
     
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
         try:
-            while time.time() - self.timestamp <= self.maxidle and not self._stop:
+            while time.time() - self.timestamp <= self.maxidle and not self._flagstop:
                 try:
                     recv = self.conn.recv(4096);
                 except BlockingIOError or TimeoutError:
