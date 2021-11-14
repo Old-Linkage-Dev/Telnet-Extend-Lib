@@ -14,10 +14,10 @@ from .bnyycsLog import logger;
 
 
 
-# Shell_BNYYCS(conn, [name], [maxidle])             // 单个用户的标准BNYYCS型shell控制线程，使用User类的update进行交互，接受用户操作后将User类的page和line返回，User类不能主动更新；
-#   conn        : socket                            // 该用户的socket连接；
-#   name        : str                               // 该用户的线程名称；
-#   maxidle     : float                             // 该用户的最大空闲，超时下线；
+# Shell_BNYYCS(conn, [name], [maxidle])                 // 单个用户的标准BNYYCS型shell控制线程，使用User类的update进行交互，接受用户操作后将User类的page和line返回，User类不能主动更新；
+#   conn        : socket                                // 该用户的socket连接；
+#   name        : str                                   // 该用户的线程名称；
+#   maxidle     : float                                 // 该用户的最大空闲，超时下线；
 
 class Shell_BNYYCE(threading.Thread):
 
@@ -64,11 +64,11 @@ class Shell_BNYYCE(threading.Thread):
 
 
 
-# Shell_Interactor(conn, [name], [shell])           // 单个用户的Interactor型shell控制线程，使用外置的shell的进程，将用户输入投射至shell进程的标准输入，将shell进程的标准输出投射至返回，实时主动更新；
-#   conn        : socket                            // 该用户的socket连接；
-#   name        : str                               // 该用户的线程名称；
-#   shell       : str                               // 该用户的shell程序；
-#   timeout     : float                             // 该用户的最长保持时间；
+# Shell_Interactor(conn, [name], [shell], [timeout])    // 单个用户的Interactor型shell控制线程，使用外置的shell的进程，将用户输入投射至shell进程的标准输入，将shell进程的标准输出投射至返回，实时主动更新；
+#   conn        : socket                                // 该用户的socket连接；
+#   name        : str                                   // 该用户的线程名称；
+#   shell       : str                                   // 该用户的shell程序；
+#   timeout     : float                                 // 该用户的最长保持时间；
 
 class Shell_Interactor(threading.Thread):
 
@@ -170,11 +170,11 @@ class Shell_Interactor(threading.Thread):
 
 
 
-# Shell_Caster(conn, [name], [shell])               // 单个用户的Caster型shell控制线程，使用外置的shell的进程，将shell进程的标准输出投射至返回，实时主动更新；
-#   conn        : socket                            // 该用户的socket连接；
-#   name        : str                               // 该用户的线程名称；
-#   shell       : str                               // 该用户的shell程序；
-#   timeout     : float                             // 该用户的最长保持时间；
+# Shell_Caster(conn, [name], [shell], [timeout])        // 单个用户的Caster型shell控制线程，使用外置的shell的进程，将shell进程的标准输出投射至返回，实时主动更新；
+#   conn        : socket                                // 该用户的socket连接；
+#   name        : str                                   // 该用户的线程名称；
+#   shell       : str                                   // 该用户的shell程序；
+#   timeout     : float                                 // 该用户的最长保持时间；
 
 class Shell_Caster(threading.Thread):
 
