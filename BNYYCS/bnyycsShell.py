@@ -103,8 +103,18 @@ class Shell_Interactor(threading.Thread):
                         if r:
                             self.pipein.write(r);
                 except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+                    self.stop();
+                    self.conn.close();
+                    self.pipein.close();
+                    self.pipeout.close();
+                    self.proc.kill();
                     logger.info('User subinput [%s] connection aborted.' % self.name);
                 except Exception as err:
+                    self.stop();
+                    self.conn.close();
+                    self.pipein.close();
+                    self.pipeout.close();
+                    self.proc.kill();
                     logger.error(err);
                     logger.critical('User subinput [%s] shell failed.');
                     logger.debug(traceback.format_exc());
@@ -145,12 +155,14 @@ class Shell_Interactor(threading.Thread):
             self._subinput.join(timeout = 2);
             time.sleep(2);
         except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+            self.stop();
             self.conn.close();
             self.pipein.close();
             self.pipeout.close();
             self.proc.kill();
             logger.info('User [%s] connection aborted.' % self.name);
         except TimeoutError as err:
+            self.stop();
             self.conn.close();
             self.pipein.close();
             self.pipeout.close();
@@ -158,6 +170,7 @@ class Shell_Interactor(threading.Thread):
             logger.info('User [%s] shell quit timeout.' % self.name);
             logger.debug(traceback.format_exc());
         except Exception as err:
+            self.stop();
             self.conn.close();
             self.pipein.close();
             self.pipeout.close();
