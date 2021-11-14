@@ -39,7 +39,7 @@ class Shell_BNYYCE(threading.Thread):
         try:
             while time.time() - self.timestamp <= self.maxidle and not self._stop:
                 try:
-                    recv = self.conn.recv();
+                    recv = self.conn.recv(4096);
                 except BlockingIOError or TimeoutError:
                     recv = None;
                 update = self.user.update(recv) if recv else None;
@@ -97,7 +97,7 @@ class Shell_Interactor(threading.Thread):
                     r = b'\x00';
                     while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and not self._stop:
                         try:
-                            r = self.conn.recv();
+                            r = self.conn.recv(4096);
                         except BlockingIOError or TimeoutError:
                             r = None;
                         if r:
