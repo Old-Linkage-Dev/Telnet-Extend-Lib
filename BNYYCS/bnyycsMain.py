@@ -11,23 +11,32 @@ from .bnyycsLog import logger;
 
 
 
-# BNYYCS([host], [port], [backlog], **kargs)        // 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
+# BNYYCS([host], [port], [backlog], [poolsize], [block], [shellclass], **kargs)
+# 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
 #   host        : str                               // 网站地址；
 #   port        : int                               // 网站端口，默认为telnet的23端口；
-#   backlog     : int                               // 网站同时接入的最大连接数；
-#   block       : bool                              // 网站是否阻塞性等待连接；
+#   backlog     : int                               // 网站接入缓冲区的大小；
+#   poolsize    : int                               // 网站同时接入的最大连接数，
+#                                                   // poolsize应当明显大于backlog，不然你让人家等了最后进来吃拒绝页吗；
+#   block       : bool                              // 网站连接是否为阻塞性，低负载下建议为True，
+#                                                   // 非阻塞下会明显增大轮询开销，
+#                                                   // 修改此属性会明显改变系统行为；
+#   shellclass  : class                             // 网站的Shell类型；
 #   **kargs     : **kargs                           // 其他参数，传递至各个Shell类；
 
-# .open()       : iter + context                    // 开启网站服务，返回一个迭代器表示每轮update，可以通过with的上下文形式访问；
+# .open()       : iter + context                    // 开启网站服务，返回一个迭代器表示每轮update，
+#                                                   // 可以通过with的上下文形式访问；
 # .close()      : none                              // 关闭网站服务；
-# .update()     : update                            // 单次update的调用，概念上返回本次update的信息，未实现；
+# .update()     : update                            // 单次update的调用，概念上返回本次update的信息，
+#                                                   // 未实现；
 
 class BNYYCS:
 
-    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, block = True, shellclass = Shell.Shell_BNYYCE, **kwargs) -> None:
+    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, poolsize = 16, block = True, shellclass = Shell.Shell_BNYYCE, **kwargs) -> None:
         self.host = host;
         self.port = port;
         self.backlog = backlog;
+        self.poolsize = poolsize;
         self.block = block;
         self.shellclass = shellclass;
         self.kwargs = kwargs;
@@ -84,7 +93,7 @@ class BNYYCS:
     
     def update(self):
         try:
-            if len(self.pool) < self.backlog:
+            if len(self.pool) < self.poolsize:
                 connection, address = self.server.accept();
                 shell = self.shellclass(conn = connection, **self.kwargs);
                 user = (address, connection, shell);
