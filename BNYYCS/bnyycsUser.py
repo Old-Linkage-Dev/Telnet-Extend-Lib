@@ -1,26 +1,38 @@
 
 # -*- coding: UTF-8 -*-
 
-from .bnyycsLog import logger;
+from . import bnyycsRes as Res;
 
-#CHAR_TYPE = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-=~!@#$%^&*()_+[]{}<>,.;:\|/?`";
-#CHAR_CMD = "\r\n\t\b\x7F\x03\x1B\x1B[A\x1B[B\x1B[D\x1B[C";
+from .bnyycsLog import logger;
+from .bnyyceCtrl import *;
+
+__all__ = [
+    "User"
+];
+
+
 
 class User:
 
     def __init__(self) -> None:
-        self.url = "";
-        self.tab = 0;
-        self.cmd = "";
+        self.res = Res.Res_RefusePage();
+        self.tab = -1;
+        self.cmd = '';
+        self.arg = {};
+        self._cmd_ready = False;
         return;
     
     @property
     def page(self):
-        return b"\f\033[0;34mHello World\033[0m\r\n";
+        #return CHR_CLR + CHR_T_FC_BLUE + b"Hello World" + CHR_T_RST + CHR_CRLF;
+        return self.res.draw(self.tab);
     
     @property
     def line(self):
-        return b"\033[0;33m >> \033[0;34m%s\033[0m" % bytes(self.cmd, "utf8");
+        return b"\033[0;33m >> \033[0;34m%s\033[0m" % bytes(self.cmd, "ascii");
     
     def update(self, inp):
-        return True;
+        for c in inp:
+            self.tab = (self.tab + 2) % (len(self.res.cmds) + 1) - 1;
+            self.cmd = self.res.cmds[self.tab] if self.tab >= 0 else self.cmd;
+        return None;
