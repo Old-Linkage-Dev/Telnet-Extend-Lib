@@ -16,7 +16,9 @@ from .bnyyceCtrl import *;
 
 
 
-# Shell_BNYYCS(conn, [name], [maxidle])                 // 单个用户的标准BNYYCS型shell控制线程，使用User类的update进行交互，接受用户操作后将User类的page和line返回，User类不能主动更新；
+# Shell_BNYYCS(conn, [name], [maxidle])
+# 单个用户的标准BNYYCS型shell控制线程，使用User类的update进行交互，
+# 接受用户操作后将User类的page和line返回，User类不能主动更新；
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
 #   maxidle     : float                                 // 该用户的最大空闲，超时下线；
@@ -66,7 +68,8 @@ class Shell_BNYYCE(threading.Thread):
 
 
 
-# Shell_Refuse(conn, [name], [reason])                  // 单个用户的标准Refuse型shell控制线程，向用户展示被拒绝访问的信息；
+# Shell_Refuse(conn, [name], [reason])
+# 单个用户的标准Refuse型shell控制线程，向用户展示被拒绝访问的信息；
 #                                                       // 该Shell应当是短暂快速轻量的处理信息，并且应当可被视作不具有时间上的开销的；
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
@@ -132,7 +135,9 @@ class Shell_Refuse(threading.Thread):
 
 
 
-# Shell_Interactor(conn, [name], [shell], [timeout])    // 单个用户的Interactor型shell控制线程，使用外置的shell的进程，将用户输入投射至shell进程的标准输入，将shell进程的标准输出投射至返回，实时主动更新；
+# Shell_Interactor(conn, [name], [shell], [timeout])
+# 单个用户的Interactor型shell控制线程，使用外置的shell的进程，
+# 将用户输入投射至shell进程的标准输入，将shell进程的标准输出投射至返回，实时主动更新；
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
 #   shell       : str                                   // 该用户的shell程序；
@@ -256,7 +261,9 @@ class Shell_Interactor(threading.Thread):
 
 
 
-# Shell_Caster(conn, [name], [shell], [timeout])        // 单个用户的Caster型shell控制线程，使用外置的shell的进程，将shell进程的标准输出投射至返回，实时主动更新；
+# Shell_Caster(conn, [name], [shell], [timeout])
+# 单个用户的Caster型shell控制线程，使用外置的shell的进程，
+# 将shell进程的标准输出投射至返回，实时主动更新；
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
 #   shell       : str                                   // 该用户的shell程序；
