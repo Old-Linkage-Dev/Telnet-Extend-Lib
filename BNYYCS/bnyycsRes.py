@@ -37,10 +37,12 @@ def splitres(res:str):
 #
 # .res          : res                                   // 该资源的res标识符；
 # .cmds         : [str]                                 // 该资源的待选指令；
-# .run(cmd:str, *args)                                  // 向资源发送一条指令执行；
-#               : none
-# .draw(tab:int)                                        // 该资源的一次绘制；
+# .draw(tab:int)                                        // 该资源的一次绘制，
 #               : bytes                                 // tab为绘制时的焦点位置；
+# .run(cmd:str, **kwargs)                               // 向资源发送一条指令执行；
+#               : none
+# .update(recv:bytes, **kwargs)                         // 向资源发送一次接受，
+#               : str                                   // 返回的update可以是一条指令；
 
 class Resource:
     
@@ -49,11 +51,16 @@ class Resource:
         self.cmds = [];
         return;
     
-    def run(self, cmd, *args, **kwargs):
-        return;
-
     def draw(self, tab):
         return;
+    
+    def run(self, cmd, **kwargs):
+        return;
+    
+    def update(self, recv, **kwargs):
+        return;
+
+
 
 class Res_RefusePage(Resource):
 
@@ -63,9 +70,6 @@ class Res_RefusePage(Resource):
         s = splitres(res);
         self.reason = s[3] if len(s) >= 3 else '';
     
-    def run(self, cmd, *args, **kwargs):
-        return;
-
     def draw(self, tab):
         _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...' if self.reason else b'NO REASON PRESENTED';
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
@@ -107,4 +111,12 @@ class Res_RefusePage(Resource):
         CHR_T_RST
         ]);
     
+    def update(self, recv, **kwargs):
+        return;
+
+    def run(self, cmd, **kwargs):
+        return;
+
+
+
 
