@@ -174,3 +174,54 @@ CHR_T_ENCIRC        = CHRf_CSI_SGR(51);
 CHR_T_UPLIN         = CHRf_CSI_SGR(52);
 CHR_T_DEFRMENC      = CHRf_CSI_SGR(53);
 CHR_T_DEUPLIN       = CHRf_CSI_SGR(54);
+
+
+# 常用字体
+def CHRf_T(*args):
+    return CHR_CSI_START + b';'.join([bytes(str(arg),'ascii') for arg in args]) + b'm';
+
+T_BOLD          = 1;
+T_UNDLIN        = 4;
+T_BLINK         = 5;
+T_REVERS        = 7;
+
+T_DEBOLD        = 22;
+T_DEUNDLIN      = 24;
+T_DEBLINK       = 25;
+T_DEREVERS      = 27;
+
+T_BLACK             = 30;
+T_RED               = 31;
+T_GREEN             = 32;
+T_YELLO             = 33;
+T_BLUE              = 34;
+T_MAGEN             = 35;
+T_CYAN              = 36;
+T_WHITE             = 37;
+T_LBLACK            = 90;
+T_LRED              = 91;
+T_LGREEN            = 92;
+T_LYELLO            = 93;
+T_LBLUE             = 94;
+T_LMAGEN            = 95;
+T_LCYAN             = 96;
+T_LWHITE            = 97;
+T_RST               = 39;
+
+T_BBLACK            = 40;
+T_BRED              = 41;
+T_BGREEN            = 42;
+T_BYELLO            = 43;
+T_BBLUE             = 44;
+T_BMAGEN            = 45;
+T_BCYAN             = 46;
+T_BWHITE            = 47;
+T_BLBLACK           = 100;
+T_BLRED             = 101;
+T_BLGREEN           = 102;
+T_BLYELLO           = 103;
+T_BLBLUE            = 104;
+T_BLMAGEN           = 105;
+T_BLCYAN            = 106;
+T_BLWHITE           = 107;
+T_BRST              = 49;
