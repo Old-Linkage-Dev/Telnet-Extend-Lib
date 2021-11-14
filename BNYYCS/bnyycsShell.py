@@ -39,7 +39,7 @@ class Shell_BNYYCE(threading.Thread):
         try:
             while time.time() - self.timestamp <= self.maxidle and not self._stop:
                 try:
-                    recv = self.conn.recv(4096);
+                    recv = self.conn.recv();
                 except BlockingIOError or TimeoutError:
                     recv = None;
                 update = self.user.update(recv) if recv else None;
