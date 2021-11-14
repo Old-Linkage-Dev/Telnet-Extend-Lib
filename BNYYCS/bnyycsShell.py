@@ -70,6 +70,10 @@ class Shell_BNYYCE(threading.Thread):
 #   shell       : str                                   // 该用户的shell程序；
 #   timeout     : float                                 // 该用户的最长保持时间；
 
+########################################################
+# 功能有问题不能用，先不修了                             #
+########################################################
+
 class Shell_Interactor(threading.Thread):
 
     def __init__(self, conn, name = '', shell = '', timeout = 300) -> None:
