@@ -8,6 +8,7 @@ from . import bnyycsLog as _bnyycs_log;
 from .bnyycsLog import logger;
 from .bnyycsMain import BNYYCS;
 from .bnyycsShell import Shell_BNYYCE;
+from .bnyycsShell import Shell_Interactor;
 from .bnyycsShell import Shell_Caster;
 from .bnyycsUser import User;
 
@@ -16,6 +17,7 @@ from .bnyycsUser import User;
 __all__ = [
     "BNYYCS",
     "Shell_BNYYCE",
+    "Shell_Interactor",
     "Shell_Caster",
     "User"
 ];
