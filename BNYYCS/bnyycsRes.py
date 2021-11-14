@@ -71,10 +71,11 @@ class Res_RefusePage(Resource):
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _midwords = bytes(_reason, 'ascii');
-        _elem_back = CHR_T_BC_LBLACK + b'[ BACK ]' + CHR_T_RST if tab == 1 else b'[ BACK ]';
-        _elem_quit = CHR_T_BC_LBLACK + b'[ QUIT ]' + CHR_T_RST if tab == 1 else b'[ QUIT ]';
+        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 0 else b'[ BACK ]';
+        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 1 else b'[ QUIT ]';
         return b''.join([
         CHR_CLR,
+        CHR_CSI_CUP,
         CHR_T_FC_YELLO,
         b'#==============================================================================#' + CHR_CRLF,
         b'| CONNECTION INFORMATION                                                       |' + CHR_CRLF,
