@@ -83,11 +83,11 @@ class Shell_Interactor(threading.Thread):
         self.pipein = None;
         self.pipeout = None;
         self._subinput = None;
-        self._stop = False;
+        self._flagstop = False;
         return;
 
     def stop(self) -> None:
-        self._stop = True;
+        self._flagstop = True;
     
     def run(self) -> None:
 
@@ -95,13 +95,14 @@ class Shell_Interactor(threading.Thread):
             def run(subinput):
                 try:
                     r = b'\x00';
-                    while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and not self._stop:
+                    while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and r != b'' and not self._flagstop:
                         try:
                             r = self.conn.recv(4096);
                         except BlockingIOError or TimeoutError:
                             r = None;
                         if r:
                             self.pipein.write(r);
+                    self.stop();
                 except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
                     self.stop();
                     self.conn.close();
@@ -144,7 +145,7 @@ class Shell_Interactor(threading.Thread):
             self._subinput = subinput(name = self.name + '_subinput');
             self._subinput.start();
             s = b'\x00';
-            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._stop:
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._flagstop:
                 s = self.pipeout.read(1);
                 self.conn.send(s);
             self.stop();
@@ -200,11 +201,11 @@ class Shell_Caster(threading.Thread):
         self.timestart = time.time();
         self.proc = None;
         self.pipe = None;
-        self._stop = False;
+        self._flagstop = False;
         return;
 
     def stop(self) -> None:
-        self._stop = True;
+        self._flagstop = True;
     
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
@@ -227,7 +228,7 @@ class Shell_Caster(threading.Thread):
             return;
         try:
             s = b'\x00';
-            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._stop:
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._flagstop:
                 s = self.pipe.read(1);
                 self.conn.send(s);
             self.conn.shutdown(socket.SHUT_RDWR);
