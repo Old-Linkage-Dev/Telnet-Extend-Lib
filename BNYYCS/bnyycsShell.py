@@ -60,7 +60,112 @@ class Shell_BNYYCE(threading.Thread):
             logger.error(err);
             logger.critical('User [%s] shell failed.' % self.name);
             logger.debug(traceback.format_exc());
-            logger.critical('User [%s] shell failed.' % self.name);
+        return;
+
+
+
+# Shell_Interactor(conn, [name], [shell])           // 单个用户的Interactor型shell控制线程，使用外置的shell的进程，将用户输入投射至shell进程的标准输入，将shell进程的标准输出投射至返回，实时主动更新；
+#   conn        : socket                            // 该用户的socket连接；
+#   name        : str                               // 该用户的线程名称；
+#   shell       : str                               // 该用户的shell程序；
+#   timeout     : float                             // 该用户的最长保持时间；
+
+class Shell_Interactor(threading.Thread):
+
+    def __init__(self, conn, name = '', shell = '', timeout = 300) -> None:
+        super().__init__();
+        self.conn = conn;
+        self.name = name if name else hex(id(self));
+        self.shell = shell;
+        self.timeout = timeout;
+        self.timestart = time.time();
+        self.proc = None;
+        self.pipein = None;
+        self.pipeout = None;
+        self._subinput = None;
+        self._stop = False;
+        return;
+
+    def stop(self) -> None:
+        self._stop = True;
+    
+    def run(self) -> None:
+
+        class subinput(threading.Thread):
+            def run(subinput):
+                try:
+                    r = b'\x00';
+                    while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and not self._stop:
+                        try:
+                            r = self.conn.recv();
+                        except BlockingIOError or TimeoutError:
+                            r = None;
+                        if r:
+                            self.pipein.write(r);
+                except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+                    logger.info('User subinput [%s] connection aborted.' % self.name);
+                except Exception as err:
+                    logger.error(err);
+                    logger.critical('User subinput [%s] shell failed.');
+                    logger.debug(traceback.format_exc());
+                return;
+
+        logger.info('User [%s] running...' % self.name);
+        try:
+            self.proc = subprocess.Popen(
+                self.shell,
+                stdin = subprocess.PIPE,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.DEVNULL,
+                shell=True
+            );
+            self.pipein = self.proc.stdin;
+            self.pipeout = self.proc.stdout;
+        except Exception as err:
+            self.conn.close();
+            self.proc = None;
+            self.pipein = None;
+            self.pipeout = None;
+            logger.error(err);
+            logger.critical('User [%s] shell failed starting.');
+            logger.debug(traceback.format_exc());
+            return;
+        try:
+            self._subinput = subinput(name = self.name + '_subinput');
+            self._subinput.start();
+            s = b'\x00';
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._stop:
+                s = self.pipeout.read(1);
+                self.conn.send(s);
+            self.stop();
+            self.conn.shutdown(socket.SHUT_RDWR);
+            self.pipein.close();
+            self.pipeout.close();
+            self.proc.kill();
+            self._subinput.join(timeout = 2);
+            time.sleep(2);
+        except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+            self.conn.close();
+            self.pipein.close();
+            self.pipeout.close();
+            self.proc.kill();
+            logger.info('User [%s] connection aborted.' % self.name);
+        except TimeoutError as err:
+            self.conn.close();
+            self.pipein.close();
+            self.pipeout.close();
+            self.proc.kill();
+            logger.info('User [%s] shell quit timeout.' % self.name);
+            logger.debug(traceback.format_exc());
+        except Exception as err:
+            self.conn.close();
+            self.pipein.close();
+            self.pipeout.close();
+            self.proc.kill();
+            logger.error(err);
+            logger.critical('User [%s] shell failed.');
+            logger.debug(traceback.format_exc());
+        logger.info('User [%s] ended.' % self.name);
         return;
 
 
