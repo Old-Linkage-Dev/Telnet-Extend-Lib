@@ -91,24 +91,7 @@ class BNYYCS:
                 continue;
         self.server.close();
     
-    def update(self):
-        try:
-            if len(self.pool) < self.poolsize:
-                connection, address = self.server.accept();
-                shell = self.shellclass(conn = connection, **self.kwargs);
-                user = (address, connection, shell);
-                self.pool.append(user);
-                shell.start();
-                logger.info('New user [%s] @%s:%d.' % (shell.name, *address));
-            else:
-                connection, address = self.server.accept();
-                shell = Shell.Shell_Refuse(conn = connection, reason = 'Fully Connected');
-                shell.run();
-                connection.close();
-                logger.info('New connection refused @%s:%d.' % address);
-        except BlockingIOError:
-            pass;
-        
+    def release(self):
         pool = [];
         for address, connection, shell in self.pool:
             if shell.is_alive():
@@ -116,3 +99,21 @@ class BNYYCS:
             else:
                 logger.info('Removed user [%s] @%s:%d.' % (shell.name, *address));
         self.pool = pool;
+
+    def update(self):
+        try:
+            connection, address = self.server.accept();
+            self.release();
+            if len(self.pool) < self.poolsize:
+                shell = self.shellclass(conn = connection, **self.kwargs);
+                user = (address, connection, shell);
+                self.pool.append(user);
+                shell.start();
+                logger.info('New user [%s] @%s:%d.' % (shell.name, *address));
+            else:
+                shell = Shell.Shell_Refuse(conn = connection, reason = 'Fully Connected');
+                shell.run();
+                connection.close();
+                logger.info('New connection refused @%s:%d.' % address);
+        except BlockingIOError:
+            pass;
