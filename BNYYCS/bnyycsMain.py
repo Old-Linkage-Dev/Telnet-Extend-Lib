@@ -9,6 +9,9 @@ from . import bnyycsRes as Res;
 
 from .bnyycsLog import logger;
 
+__all__ = [
+    "BNYYCS"
+];
 
 
 # BNYYCS([host], [port], [backlog], [poolsize], [block], [shellclass], **kargs)
