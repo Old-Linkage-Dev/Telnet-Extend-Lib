@@ -38,6 +38,8 @@ class Shell_BNYYCE(threading.Thread):
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
         self.user = User.User();
+        self.res = Res.Res_RefusePage();
+        self.kwargs = {};
         self.timestamp = time.time();
         self._flagstop = False;
         return;
@@ -45,22 +47,41 @@ class Shell_BNYYCE(threading.Thread):
     def stop(self) -> None:
         self._flagstop = True;
     
+    def cmd(self, command):
+        if command == 'quit':
+            self.stop();
+        elif command:
+            self.res.run(command, **self.kwargs);
+
+    def updateres(self, recv):
+        update = self.res.update(recv, **self.kwargs);
+        if update:
+            logger.info('User [%s] res updated "%s"' % (self.name, update));
+            self.cmd(update);
+    
+    def updateuser(self, recv):
+        update = self.user.update(recv, **self.kwargs);
+        if update:
+            self.timestamp = time.time();
+            logger.info('User [%s] updated "%s"' % (self.name, update));
+            self.cmd(update);
+    
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
         try:
-            while time.time() - self.timestamp <= self.maxidle and not self._flagstop:
+            self.conn.send(self.res.draw(self.user.tab));
+            self.conn.send(self.user.draw());
+            recv = CHR_NUL;
+            while time.time() - self.timestamp <= self.maxidle and recv != b'' and not self._flagstop:
                 try:
                     recv = self.conn.recv(4096);
                 except BlockingIOError or TimeoutError:
                     recv = None;
-                update = self.user.update(recv) if recv else None;
-                self.conn.send(self.user.page);
-                self.conn.send(self.user.line);
-                if update:
-                    self.timestamp = time.time();
-                    logger.info('User [%s] updated "%s"' % (self.name, update));
-                if update == 'quit':
-                    break;
+                if recv:
+                    self.updateuser(recv);
+                    self.updateres(recv);
+                    self.conn.send(self.res.draw(self.user.tab));
+                    self.conn.send(self.user.draw(self.res.res, **self.kwargs));
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
         except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
