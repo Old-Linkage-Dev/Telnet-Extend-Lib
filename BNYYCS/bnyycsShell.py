@@ -38,9 +38,9 @@ class Shell_BNYYCE(threading.Thread):
         self.conn = conn;
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
-        self.user = User.User();
+        self.params = {};
+        self.user = User.User_BNYYCS();
         self.res = Res.Res_RefusePage();
-        self.kwargs = {};
         self.timestamp = time.time();
         self._flagstop = False;
         return;
@@ -52,26 +52,41 @@ class Shell_BNYYCE(threading.Thread):
         if command == 'quit':
             self.stop();
         elif command:
-            self.res.run(command, **self.kwargs);
+            self.res.run(command, self.params);
+            self.user.cmds = self.res.cmds;
 
     def updateres(self, recv):
-        update = self.res.update(recv, **self.kwargs);
+        update = self.res.update(recv = recv, params = self.params);
         if update:
             logger.info('User [%s] res updated "%s"' % (self.name, update));
             self.cmd(update);
+        self.user.cmds = self.res.cmds;
     
     def updateuser(self, recv):
-        update = self.user.update(recv, **self.kwargs);
+        update = self.user.update(recv, self.params);
         if update:
             self.timestamp = time.time();
             logger.info('User [%s] updated "%s"' % (self.name, update));
             self.cmd(update);
     
+    def draw(self):
+        _draw = (
+            CHR_CLR,
+            CHR_CSI_CUP,
+            self.res.draw(tab = self.user.tab, params = self.params),
+            CHR_T_RST,
+            CHRf_CSI_CUP(21, 1),
+            self.user.draw(res = self.res.res, params = self.params),
+            CHR_T_RST,
+            CHRf_CSI_CUP(24, 80),
+        );
+        self.conn.send(_draw);
+        return;
+    
     def run(self) -> None:
         logger.info('User [%s] running...' % self.name);
         try:
-            self.conn.send(self.res.draw(self.user.tab));
-            self.conn.send(self.user.draw());
+            self.draw();
             recv = CHR_NUL;
             while time.time() - self.timestamp <= self.maxidle and recv != b'' and not self._flagstop:
                 try:
@@ -81,8 +96,7 @@ class Shell_BNYYCE(threading.Thread):
                 if recv:
                     self.updateuser(recv);
                     self.updateres(recv);
-                    self.conn.send(self.res.draw(self.user.tab));
-                    self.conn.send(self.user.draw(self.res.res, **self.kwargs));
+                    self.draw();
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
         except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
