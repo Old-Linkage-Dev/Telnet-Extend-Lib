@@ -8,9 +8,8 @@ from . import bnyycsLog as _bnyycs_log;
 from .bnyycsLog import logger;
 from .bnyycsMain import *;
 from .bnyycsShell import *;
-from .bnyycsShell import *;
-from .bnyycsShell import *;
 from .bnyycsUser import *;
+from .bnyycsRes import *;
 
 
 
