@@ -84,7 +84,17 @@ class User_BNYYCS:
         return;
     
     def draw(self, res, params = {}):
-        return b"\033[0;33m >> \033[0;34m%s\033[0m" % bytes(self.cmd, "ascii");
+        _scmd = self.cmd.split(maxsplit = 1);
+        _cmd = (_scmd[0] + ' ') if len(_scmd) >= 1 else '';
+        _para = (_scmd[1] if len(_cmd) <= 76 else _scmd[1][76 - len(_scmd[0]) - 5] + '...') if len(_scmd) >= 2 else '';
+        _rspace = b'%*s' % ((76 - len(bytes(_cmd + _para, 'ascii'))), b'');
+        _ret = (
+            CHR_T_FC_YELLO + b' >> ' +
+            CHR_T_FC_RED + bytes(_cmd, 'ascii') +
+            CHR_T_FC_BLUE + bytes(_para, 'ascii') + _rspace +
+            CHR_T_RST
+        );
+        return _ret
 
     def update(self, recv, params = {}):
         for c in recv:

@@ -40,7 +40,7 @@ class Shell_BNYYCE(threading.Thread):
         self.maxidle = maxidle;
         self.params = {};
         self.user = User.User_BNYYCS();
-        self.res = Res.Res_RefusePage();
+        self.res = Res.Res_SamplePage();
         self.timestamp = time.time();
         self._flagstop = False;
         return;
@@ -71,14 +71,10 @@ class Shell_BNYYCE(threading.Thread):
     
     def draw(self):
         _draw = (
-            CHR_CLR,
-            CHR_CSI_CUP,
-            self.res.draw(tab = self.user.tab, params = self.params),
-            CHR_T_RST,
-            CHRf_CSI_CUP(21, 1),
-            self.user.draw(res = self.res.res, params = self.params),
-            CHR_T_RST,
-            CHRf_CSI_CUP(24, 80),
+            CHR_CLR +
+            CHR_CSI_CUP + self.res.draw(tab = self.user.tab, params = self.params) + CHR_T_RST +
+            CHRf_CSI_CUP(21, 1) + self.user.draw(res = self.res.res, params = self.params) + CHR_T_RST +
+            CHRf_CSI_CUP(24, 80)
         );
         self.conn.send(_draw);
         return;

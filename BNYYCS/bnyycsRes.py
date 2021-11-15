@@ -78,37 +78,38 @@ class Res_RefusePage(Resource):
         self.reason = s[3] if len(s) >= 3 else '';
     
     def draw(self, tab, params = {}):
-        _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...' if self.reason else b'NO REASON PRESENTED';
+        _reason = (self.reason if len(self.reason) <= 72 else self.reason[:69] + '...') if self.reason != '' else 'NO REASON PRESENTED';
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
         _midwords = bytes(_reason, 'ascii');
-        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 0 else b'[ BACK ]';
-        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 1 else b'[ QUIT ]';
-        return (
-            CHR_T_FC_YELLO,
-            b'#==============================================================================#', CHR_CRLF,
-            b'| CONNECTION INFORMATION                                                       |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'| The atempt to visit this site is refused,                                    |', CHR_CRLF,
-            b'| The reason to the rufusing is:                                               |', CHR_CRLF,
-            b'|   '                  + _lspace + _midwords + _rspace +                  b'   |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |', CHR_CRLF,
-            b'#==============================================================================#', CHR_CRLF,
-            CHRf_CSI_CUMOV(-7, 35), _elem_back, CHR_CRLF,
-            CHRf_CSI_CUMOV(1, 35), _elem_quit, CHR_CRLF,
+        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;
+        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_LBLUE + b'[ QUIT ]' + CHR_T_RST;
+        _ret = (
+            CHR_T_FC_YELLO +
+            b'#==============================================================================#' + CHR_CRLF +
+            b'| CONNECTION INFORMATION                                                       |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'| The atempt to visit this site is refused,                                    |' + CHR_CRLF +
+            b'| The reason to the rufusing is:                                               |' + CHR_CRLF +
+            b'|   '                  + _lspace + _midwords + _rspace +                  b'   |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |' + CHR_CRLF +
+            b'#==============================================================================#' + CHR_CRLF +
+            CHRf_CSI_CUMOV(-7, 35) + _elem_back, CHR_CRLF +
+            CHRf_CSI_CUMOV(1, 35) + _elem_quit, CHR_CRLF
         );
+        return _ret
     
     def update(self, recv, params = {}):
         return;
@@ -127,42 +128,42 @@ class Res_SamplePage(Resource):
         return;
     
     def draw(self, tab, params = {}):
-        _str_lastcmd = self._lastcmd if len(self._lastcmd) <= 72 else self._lastcmd[:69] + '...' if self._lastcmd else b'NO REASON PRESENTED';
+        _str_lastcmd = (self._lastcmd if len(self._lastcmd) <= 72 else self._lastcmd[:69] + '...') if self._lastcmd != '' else 'NO CMD';
         _lspace = b'%*s' % (math.ceil((72 - len(bytes(_str_lastcmd, 'ascii'))) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(bytes(_str_lastcmd, 'ascii'))) / 2), b'');
         _b_lastcmd = bytes(_str_lastcmd, 'ascii');
-        _elem_lastcmd = _lspace + _b_lastcmd + _rspace;
+        _elem_lastcmd = CHR_T_FC_LBLUE + _lspace + _b_lastcmd + _rspace + CHR_T_RST;
         _elem_test = CHR_T_RST + CHR_T_BC_WHITE + b'[ TEST ]' + CHR_T_RST if tab == 0 else CHR_T_FC_LBLUE + b'[ TEST ]' + CHR_T_RST;
         _elem_help = CHR_T_RST + CHR_T_BC_WHITE + b'[ HELP ]' + CHR_T_RST if tab == 1 else CHR_T_FC_LBLUE + b'[ HELP ]' + CHR_T_RST;
         _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;
         _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_LBLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
-            CHR_T_FC_LBLUE,
-            b'#==============================================================================#', CHR_CRLF,
-            b'| A SAMPLE PAGE                                                                |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'| This is a sample page to show the basic components of a page.                |', CHR_CRLF,
-            b'| Here is a line of commands sent in, printed as an element:                   |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'| Here are some selective elements with commands attached, which you can try   |', CHR_CRLF,
-            b'| selecting between them, if it is supported.                                  |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                                              |', CHR_CRLF,
-            b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |', CHR_CRLF,
-            b'#==============================================================================#', CHR_CRLF,
-            CHRf_CSI_CUMOV(-15, 5), _elem_lastcmd, CHR_CRLF,
-            CHRf_CSI_CUMOV(4, 35), _elem_test, CHR_CRLF,
-            CHRf_CSI_CUMOV(1, 35), _elem_help, CHR_CRLF,
-            CHRf_CSI_CUMOV(1, 35), _elem_back, CHR_CRLF,
-            CHRf_CSI_CUMOV(1, 35), _elem_quit, CHR_CRLF,
+            CHR_T_FC_LBLUE +
+            b'#==============================================================================#' + CHR_CRLF +
+            b'| A SAMPLE PAGE                                                                |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'| This is a sample page to show the basic components of a page.                |' + CHR_CRLF +
+            b'| Here is a line of commands sent in, printed as an element:                   |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'| Here are some selective elements with commands attached, which you can try   |' + CHR_CRLF +
+            b'| selecting between them, if it is supported.                                  |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                                              |' + CHR_CRLF +
+            b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |' + CHR_CRLF +
+            b'#==============================================================================#' + CHR_CRLF +
+            CHRf_CSI_CUMOV(-15, 3) + _elem_lastcmd + CHR_CRLF +
+            CHRf_CSI_CUMOV(4, 35) + _elem_test + CHR_CRLF +
+            CHRf_CSI_CUMOV(1, 35) + _elem_help + CHR_CRLF +
+            CHRf_CSI_CUMOV(1, 35) + _elem_back + CHR_CRLF +
+            CHRf_CSI_CUMOV(1, 35) + _elem_quit + CHR_CRLF
         );
         return _ret;
     

@@ -25,15 +25,36 @@ import BNYYCS;
 # open可使用with进行
 # 开始轮询和
 
+##  serv = BNYYCS.BNYYCS(
+##      host = "localhost",
+##      port = 23,
+##      backlog = 4,
+##      poolsize = 3,
+##      block = True,
+##      shellclass = BNYYCS.Shell_Caster,
+##      shell = 'python still_alive_credit_fortelnet.py'
+##  );
+
+##  serv = BNYYCS.BNYYCS(
+##      host = "localhost",
+##      port = 23,
+##      backlog = 4,
+##      poolsize = 3,
+##      block = True,
+##      shellclass = BNYYCS.Shell_Echo,
+##      prt = True
+##  );
+
 serv = BNYYCS.BNYYCS(
     host = "localhost",
     port = 23,
     backlog = 4,
     poolsize = 16,
     block = True,
-    shellclass = BNYYCS.Shell_Caster,
-    shell = 'python still_alive_credit_fortelnet.py'
+    shellclass = BNYYCS.Shell_BNYYCE,
+    maxidle = 300
 );
+
 #serv = BNYYCS.BNYYCS(host = "localhost");
 
 try:
