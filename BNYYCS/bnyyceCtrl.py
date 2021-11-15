@@ -144,9 +144,9 @@ def CHRf_CSI_CUB(n):
     return CHR_CSI_START + bytes(str(n),'ascii') + b'D';
 
 def CHRf_CSI_CUMOV(y, x):
-    assert y != 0 and abs(y) < 32768;
-    assert x != 0 and abs(x) < 32768;
-    return (CHRf_CSI_CUD(y) if y > 0 else CHRf_CSI_CUU(-y)) + (CHRf_CSI_CUF(x) if x > 0 else CHRf_CSI_CUB(-x));
+    assert abs(y) < 32768;
+    assert abs(x) < 32768;
+    return (b'' if y == 0 else CHRf_CSI_CUD(y) if y > 0 else CHRf_CSI_CUU(-y)) + (b'' if x == 0 else CHRf_CSI_CUF(x) if x > 0 else CHRf_CSI_CUB(-x));
 
 def CHRf_CSI_CHA(y):
     assert 0 < y < 32768;
