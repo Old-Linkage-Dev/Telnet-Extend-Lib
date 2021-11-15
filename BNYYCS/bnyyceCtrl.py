@@ -35,6 +35,82 @@ CHR_RS      = b'\x1E';
 CHR_US      = b'\x1F';
 CHR_DEL     = b'\x7F';
 
+CHRS_C0 = (
+    b'\x00\x01\x02\x03\x04\x05\x06\x07'
+    b'\x08\x09\x0A\x0B\x0C\x0D\x0E\x0F'
+    b'\x10\x11\x12\x13\x14\x15\x16\x17'
+    b'\x18\x19\x1A\x1B\x1C\x1D\x1E\x1F'
+);
+
+CHRS_C1 = (
+    b'\x80\x81\x82\x83\x84\x85\x86\x87'
+    b'\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F'
+    b'\x90\x91\x92\x93\x94\x95\x96\x97'
+    b'\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F'
+);
+
+CHRS_NONPRT = (CHRS_C0, CHR_DEL, CHRS_C1);
+
+
+
+# ASCII 打印字符
+CHRS_PRINT = (
+    b' !"#$%&\'()*+,-./'
+    b'0123456789:;<=>?'
+    b'@ABCDEFGHIJKLMNO'
+    b'PQRSTUVWXYZ[\\]^_'
+    b'`abcdefghijklmno'
+    b'pqrstuvwxyz{|}~'
+);
+CHRS_EXT = (
+    b'\x80\x81\x82\x83\x84\x85\x86\x87'
+    b'\x88\x89\x8A\x8B\x8C\x8D\x8E\x8F'
+    b'\x90\x91\x92\x93\x94\x95\x96\x97'
+    b'\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F'
+    b'\xA0\xA1\xA2\xA3\xA4\xA5\xA6\xA7'
+    b'\xA8\xA9\xAA\xAB\xAC\xAD\xAE\xAF'
+    b'\xB0\xB1\xB2\xB3\xB4\xB5\xB6\xB7'
+    b'\xB8\xB9\xBA\xBB\xBC\xBD\xBE\xBF'
+    b'\xC0\xC1\xC2\xC3\xC4\xC5\xC6\xC7'
+    b'\xC8\xC9\xCA\xCB\xCC\xCD\xCE\xCF'
+    b'\xD0\xD1\xD2\xD3\xD4\xD5\xD6\xD7'
+    b'\xD8\xD9\xDA\xDB\xDC\xDD\xDE\xDF'
+    b'\xE0\xE1\xE2\xE3\xE4\xE5\xE6\xE7'
+    b'\xE8\xE9\xEA\xEB\xEC\xED\xEE\xEF'
+    b'\xF0\xF1\xF2\xF3\xF4\xF5\xF6\xF7'
+    b'\xF8\xF9\xFA\xFB\xFC\xFD\xFE\xFF'
+);
+
+
+
+# 输入控制字符
+CHR_KEY_UP = b'\x1b[A';
+CHR_KEY_DOWN = b'\x1b[B';
+CHR_KEY_LEFT = b'\x1b[D';
+CHR_KEY_RIGHT = b'\x1b[C';
+
+CHR_KEY_BS = b'\x08';
+CHR_KEY_TAB = b'\x09';
+CHR_KEY_SP = b'\x20';
+CHR_KEY_DEL = b'\x7f';
+
+CHR_KEY_HOME = b'\x1b[1~';
+CHR_KEY_END = b'\x1b[4~';
+CHR_KEY_PGUP = b'\x1b[5~';
+CHR_KEY_PGDN = b'\x1b[6~';
+CHR_KEY_INS = b'\x1b[2~';
+
+#CHR_KEY_F1 = b'\x1bOP';
+#CHR_KEY_F2 = b'\x1bOQ';
+#CHR_KEY_F3 = b'\x1bOR';
+#CHR_KEY_F4 = b'\x1bOS';
+#CHR_KEY_F5 = b'\x1b[15~';
+#CHR_KEY_F7 = b'\x1b[18~';
+#CHR_KEY_F9 = b'\x1b[20~';
+#CHR_KEY_F10 = b'\x1b[21~';
+#CHR_KEY_F11 = b'\x1b[23~';
+#CHR_KEY_F12 = b'\x1b[24~';
+
 
 
 # CSI 控制字符
@@ -66,6 +142,11 @@ def CHRf_CSI_CUF(n):
 def CHRf_CSI_CUB(n):
     assert 0 < n < 32768;
     return CHR_CSI_START + bytes(str(n),'ascii') + b'D';
+
+def CHRf_CSI_CUMOV(y, x):
+    assert y != 0 and abs(y) < 32768;
+    assert x != 0 and abs(x) < 32768;
+    return (CHRf_CSI_CUD(y) if y > 0 else CHRf_CSI_CUU(-y)) + (CHRf_CSI_CUF(x) if x > 0 else CHRf_CSI_CUB(-x));
 
 def CHRf_CSI_CHA(y):
     assert 0 < y < 32768;
