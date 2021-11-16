@@ -113,11 +113,11 @@ class User_BNYYCS:
         return;
     
     def doup(self):
-        self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
+        self.tab = (self.tab) % (len(self.cmds) + 1) - 1;
         return;
     
     def dodown(self):
-        self.tab = (self.tab) % (len(self.cmds) + 1) - 1;
+        self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
         return;
     
     def doesc(self):
