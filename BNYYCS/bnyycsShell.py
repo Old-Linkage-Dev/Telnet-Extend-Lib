@@ -92,7 +92,8 @@ class Shell_BNYYCS(threading.Thread):
                     recv = None;
                 if recv:
                     self.iq.push(recv);
-                    chrs = [chr for chr in self.iq.pops()]
+                    chrs = [chr for chr in self.iq.pops()];
+                    # 对于此处是否应该对两者进行同步更新是需要继续讨论的；
                     self.updateuser(chrs);
                     self.updateres(chrs);
                     self.draw();
