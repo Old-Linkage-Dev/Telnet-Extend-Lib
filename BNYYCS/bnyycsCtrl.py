@@ -353,3 +353,9 @@ class InputQueue:
                 return _chr;
         else:
             return b'';
+    
+    def pops(self):
+        _chr = self.pop();
+        while _chr:
+            yield _chr;
+        return;
