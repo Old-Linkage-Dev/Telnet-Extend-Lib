@@ -15,19 +15,19 @@ __all__ = [
 
 
 
-# res = str
+# res = bytes
 # 本系统使用的统一资源标识符，
 # 形如"res:<path>[:<type>[:<param>[:<param...>]]]"
 
 
 
-# splitres(res:res) : list[str]
+# splitres(res:res) : list[bytes]
 # 用于拆分一个res为各个分段，
 # 去除头部res标准，返回各个分段；
 
-def splitres(res:str):
-    s = res.split(':');
-    assert s[0] == 'res';
+def splitres(res : bytes):
+    s = res.split(b':');
+    assert s[0] == b'res';
     return s[1:];
 
 
@@ -38,17 +38,17 @@ def splitres(res:str):
 #   params      : dict                                  // Shell当前的环境参数，
 #
 # .res          : res                                   // 该资源的res标识符；
-# .cmds         : [str]                                 // 该资源的待选指令；
+# .cmds         : [bytes]                               // 该资源的待选指令；
 # .draw(tab:int, params)                                // 该资源的一次绘制，tab为绘制时的焦点位置，params是Shell当前的环境参数，
 #               : bytes                                 // 一个标准的res的draw应当返回一个可以实现画面绘制的bytes序列，
 #                                                       // 绘制的控制序列应当遵循常用的，如VT100的控制协议，和80x24的尺寸，
 #                                                       // 一个res应当只绘制屏幕上部80x20的区域，一方面这有利于避免绘制(80,24)后的换行推出屏幕，
 #                                                       // 另一方面因为Shell中可能会通过其他调用在画面下部绘制辅助内容，
 #                                                       // 绘制的过程应当使用相对坐标，绘制前系统会清屏，光标归位左上；
-# .run(cmd:str, params)                                 // 向资源发送一条指令执行，
+# .run(cmd:bytes, params)                               // 向资源发送一条指令执行，
 #               : none                                  // params是Shell当前的环境参数；
 # .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
-#               : str                                   // 返回update表示交由Shell执行一条指令；
+#               : bytes                                 // 返回update表示交由Shell执行一条指令；
 
 class Resource:
     
@@ -71,17 +71,16 @@ class Resource:
 
 class Res_RefusePage(Resource):
 
-    def __init__(self, res = 'res::refuse', params = {}) -> None:
+    def __init__(self, res = b'res::refuse', params = {}) -> None:
         self.res = res;
-        self.cmds = ['back', 'quit'];
+        self.cmds = [b'back', b'quit'];
         s = splitres(res);
-        self.reason = s[3] if len(s) >= 3 else '';
+        self.reason = s[3] if len(s) >= 3 else b'';
     
     def draw(self, tab, params = {}):
-        _reason = (self.reason if len(self.reason) <= 72 else self.reason[:69] + '...') if self.reason != '' else 'NO REASON PRESENTED';
-        _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
-        _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
-        _midwords = bytes(_reason, 'ascii');
+        _reason = (self.reason if len(self.reason) <= 72 else self.reason[:69] + b'...') if self.reason else b'NO REASON PRESENTED';
+        _lspace = b'%*s' % (math.ceil((72 - len(_reason)) / 2), b'');
+        _rspace = b'%*s' % (math.floor((72 - len(_reason)) / 2), b'');
         _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;
         _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_LBLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
@@ -91,7 +90,7 @@ class Res_RefusePage(Resource):
             b'|                                                                              |' + CHR_CRLF +
             b'| The atempt to visit this site is refused,                                    |' + CHR_CRLF +
             b'| The reason to the rufusing is:                                               |' + CHR_CRLF +
-            b'|   '                  + _lspace + _midwords + _rspace +                  b'   |' + CHR_CRLF +
+            b'|   '                   + _lspace + _reason + _rspace +                   b'   |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
@@ -121,18 +120,17 @@ class Res_RefusePage(Resource):
 
 class Res_SamplePage(Resource):
 
-    def __init__(self, res = 'res::sample', params = {}) -> None:
+    def __init__(self, res = b'res::sample', params = {}) -> None:
         self.res = res;
-        self.cmds = ['test "this is a test"', 'help', 'back', 'quit'];
-        self._lastcmd = '';
+        self.cmds = [b'test "this is a test"', b'help', b'back', b'quit'];
+        self._lastcmd = b'';
         return;
     
     def draw(self, tab, params = {}):
-        _str_lastcmd = (self._lastcmd if len(self._lastcmd) <= 72 else self._lastcmd[:69] + '...') if self._lastcmd != '' else 'NO CMD';
-        _lspace = b'%*s' % (math.ceil((72 - len(bytes(_str_lastcmd, 'ascii'))) / 2), b'');
-        _rspace = b'%*s' % (math.floor((72 - len(bytes(_str_lastcmd, 'ascii'))) / 2), b'');
-        _b_lastcmd = bytes(_str_lastcmd, 'ascii');
-        _elem_lastcmd = CHR_T_FC_LBLUE + _lspace + _b_lastcmd + _rspace + CHR_T_RST;
+        _lastcmd = (self._lastcmd if len(self._lastcmd) <= 72 else self._lastcmd[:69] + b'...') if self._lastcmd != b'' else b'NO CMD';
+        _lspace = b'%*s' % (math.ceil((72 - len(_lastcmd)) / 2), b'');
+        _rspace = b'%*s' % (math.floor((72 - len(_lastcmd)) / 2), b'');
+        _elem_lastcmd = CHR_T_FC_LBLUE + _lspace + _lastcmd + _rspace + CHR_T_RST;
         _elem_test = CHR_T_RST + CHR_T_BC_WHITE + b'[ TEST ]' + CHR_T_RST if tab == 0 else CHR_T_FC_LBLUE + b'[ TEST ]' + CHR_T_RST;
         _elem_help = CHR_T_RST + CHR_T_BC_WHITE + b'[ HELP ]' + CHR_T_RST if tab == 1 else CHR_T_FC_LBLUE + b'[ HELP ]' + CHR_T_RST;
         _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;

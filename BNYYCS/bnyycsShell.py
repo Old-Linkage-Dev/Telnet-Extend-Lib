@@ -50,7 +50,7 @@ class Shell_BNYYCE(threading.Thread):
         self._flagstop = True;
     
     def cmd(self, command):
-        if command == 'quit':
+        if command == b'quit':
             self.stop();
         elif command:
             self.res.run(command, self.params);
