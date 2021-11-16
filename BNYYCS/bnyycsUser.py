@@ -106,7 +106,7 @@ class User_BNYYCS:
         _match = self.cmdmatch(self._cmd)
         if _match == -1:
             pass;
-        elif self.cmds[_match] == self.cmd:
+        elif self.cmds[_match] == self._cmd:
             self.tab = _match;
         else:
             self._cmd = self.cmds[_match];
