@@ -155,19 +155,19 @@ CHR_CSI_SGR         = CHR_CSI_START + b'm';
 
 def CHRf_CSI_CUU(n):
     assert 0 < n < 32768;
-    return CHR_CSI_START + bytes(str(n),'ascii') + b'A';
+    return CHR_CSI_START + bytes(str(n), CHRSET_SYS) + b'A';
 
 def CHRf_CSI_CUD(n):
     assert 0 < n < 32768;
-    return CHR_CSI_START + bytes(str(n),'ascii') + b'B';
+    return CHR_CSI_START + bytes(str(n), CHRSET_SYS) + b'B';
 
 def CHRf_CSI_CUF(n):
     assert 0 < n < 32768;
-    return CHR_CSI_START + bytes(str(n),'ascii') + b'C';
+    return CHR_CSI_START + bytes(str(n), CHRSET_SYS) + b'C';
 
 def CHRf_CSI_CUB(n):
     assert 0 < n < 32768;
-    return CHR_CSI_START + bytes(str(n),'ascii') + b'D';
+    return CHR_CSI_START + bytes(str(n), CHRSET_SYS) + b'D';
 
 def CHRf_CSI_CUMOV(y, x):
     assert abs(y) < 32768;
@@ -176,24 +176,24 @@ def CHRf_CSI_CUMOV(y, x):
 
 def CHRf_CSI_CHA(y):
     assert 0 < y < 32768;
-    return CHR_CSI_START + bytes(str(y),'ascii') + b'G';
+    return CHR_CSI_START + bytes(str(y), CHRSET_SYS) + b'G';
 
 def CHRf_CSI_VPA(x):
     assert 0 < x < 32768;
-    return CHR_CSI_START + bytes(str(x),'ascii') + b'd';
+    return CHR_CSI_START + bytes(str(x), CHRSET_SYS) + b'd';
 
 def CHRf_CSI_CUP(y, x):
     assert 0 < y < 32768;
     assert 0 < x < 32768;
-    return CHR_CSI_START + bytes(str(y),'ascii') + b';' + bytes(str(x),'ascii') + b'H';
+    return CHR_CSI_START + bytes(str(y), CHRSET_SYS) + b';' + bytes(str(x), CHRSET_SYS) + b'H';
 
 def CHRf_CSI_HVP(y, x):
     assert 0 < y < 32768;
     assert 0 < x < 32768;
-    return CHR_CSI_START + bytes(str(y),'ascii') + b';' + bytes(str(x),'ascii') + b'f';
+    return CHR_CSI_START + bytes(str(y), CHRSET_SYS) + b';' + bytes(str(x), CHRSET_SYS) + b'f';
 
 def CHRf_CSI_SGR(*args):
-    return CHR_CSI_START + b';'.join([bytes(str(arg),'ascii') for arg in args]) + b'm';
+    return CHR_CSI_START + b';'.join([bytes(str(arg), CHRSET_SYS) for arg in args]) + b'm';
 
 
 
@@ -277,7 +277,7 @@ CHR_T_DEUPLIN       = CHRf_CSI_SGR(54);
 
 # 常用字体
 def CHRf_T(*args):
-    return CHR_CSI_START + b';'.join([bytes(str(arg),'ascii') for arg in args]) + b'm';
+    return CHR_CSI_START + b';'.join([bytes(str(arg), CHRSET_SYS) for arg in args]) + b'm';
 
 T_BOLD          = 1;
 T_UNDLIN        = 4;
