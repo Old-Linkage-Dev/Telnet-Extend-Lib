@@ -322,27 +322,32 @@ class InputQueue:
     
     def pop(self):
         if len(self._input) > 0:
-            if self._input[0] == CHR_ESC:
-                _i = 1;
-                while _i < len(self._input) and self._input[_i] not in CHRS_ESC_END:
-                    _i += 1;
-                if _i < len(self._input) and self._input[:_i-1] == CHR_CSI_START:
-                    while _i < len(self._input) and self._input[_i] not in CHRS_CSI_END:
-                        _i += 1;
+            if self._input[:1] == CHR_ESC:
+                _i = 0;
+                if len(self._input) > 1 and self._input[1:2] in CHRS_ESC_END:
+                    _i = 1;
+                    if _i < len(self._input) and self._input[:2] == CHR_CSI_START:
+                        _i = 2;
+                        while _i < len(self._input) and self._input[_i:_i+1] not in CHRS_CSI_END:
+                            _i += 1;
                 if _i < len(self._input):
-                    _chr, self._input = self._input[:_i + 1], self._input[_i + 1:];
+                    _chr, self._input = self._input[:_i+1], self._input[_i+1:];
+                    return _chr;
                 else:
                     return b'';
-            elif self._input[0] in CHRS_RETURN:
+            elif self._input[:1] in CHRS_RETURN:
                 if len(self._input) > 1:
                     if self._input[:2] == CHR_CRLF:
                         _chr, self._input = self._input[:2], self._input[2:];
                         return _chr;
                     else:
-                        _chr, self._input = self._input[0], self._input[1:];
+                        _chr, self._input = self._input[:1], self._input[1:];
                         return _chr;
+                else:
+                    _chr, self._input = self._input[:1], self._input[1:];
+                    return _chr;
             else:
-                _chr, self._input = self._input[0], self._input[1:];
+                _chr, self._input = self._input[:1], self._input[1:];
                 return _chr;
         else:
             return b'';
