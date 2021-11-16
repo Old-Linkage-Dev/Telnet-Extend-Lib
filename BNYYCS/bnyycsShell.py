@@ -103,6 +103,7 @@ class Shell_BNYYCE(threading.Thread):
             logger.error(err);
             logger.critical('User [%s] shell failed.' % self.name);
             logger.debug(traceback.format_exc());
+        logger.info('User [%s] ended.' % self.name);
         return;
 
 
