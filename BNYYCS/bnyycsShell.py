@@ -41,6 +41,7 @@ class Shell_BNYYCE(threading.Thread):
         self.params = {};
         self.user = User.User_BNYYCS();
         self.res = Res.Res_SamplePage();
+        self.iq = InputQueue();
         self.timestamp = time.time();
         self._flagstop = False;
         return;
@@ -55,15 +56,15 @@ class Shell_BNYYCE(threading.Thread):
             self.res.run(command, self.params);
             self.user.cmds = self.res.cmds;
 
-    def updateres(self, recv):
-        update = self.res.update(recv = recv, params = self.params);
+    def updateres(self, inps):
+        update = self.res.update(inps = inps, params = self.params);
         if update:
             logger.info('User [%s] res updated "%s"' % (self.name, update));
             self.cmd(update);
         self.user.cmds = self.res.cmds;
     
-    def updateuser(self, recv):
-        update = self.user.update(recv, self.params);
+    def updateuser(self, inps):
+        update = self.user.update(inps = inps, params = self.params);
         if update:
             self.timestamp = time.time();
             logger.info('User [%s] updated "%s"' % (self.name, update));
@@ -90,8 +91,10 @@ class Shell_BNYYCE(threading.Thread):
                 except BlockingIOError or TimeoutError:
                     recv = None;
                 if recv:
-                    self.updateuser(recv);
-                    self.updateres(recv);
+                    self.iq.push(recv);
+                    chrs = [chr for chr in self.iq.pops()]
+                    self.updateuser(chrs);
+                    self.updateres(chrs);
                     self.draw();
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);

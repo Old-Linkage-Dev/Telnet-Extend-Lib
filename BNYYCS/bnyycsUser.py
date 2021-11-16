@@ -25,7 +25,7 @@ __all__ = [
 #                                                       // 限制范围因为Shell中可能会调用Res在上方80x20绘制画面，
 #                                                       // 保留字符是为了避免绘制(80,24)字符后可能的换行导致内容推出屏幕，
 #                                                       // 绘制的过程应当使用相对坐标，绘制前光标置于(1,21)，即下80x4区域的第一个字符位；
-# .update(recv:bytes, params)                           // 向资源发送一次接受，params是Shell当前的环境参数，
+# .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : str                                   // 返回update表示交由Shell执行一条指令；
 class User:
 
@@ -54,10 +54,11 @@ class User:
     def draw(self, res, params = {}):
         return b'';
 
-    def update(self, recv, params = {}):
+    def update(self, inps = [], params = {}):
         self._params = params;
-        recv;
-        # do sth to recv;
+        for inp in inps:
+            ...;
+            # do sth to inps;
         return None;
 
 
@@ -72,7 +73,7 @@ class User:
 #                                                       // 在用户使用Tab键时根据当前已输入指令执行辅助输入补全，或cmds下一，或不操作；
 # .draw(res)                                            // 该用户的一次绘制，res为绘制时的统一资源标识符，
 #               : bytes                                 // 在画面下方提供一个单行输入位置；
-# .update(recv:bytes, params)                           // 向资源发送一次接受，params是Shell当前的环境参数，
+# .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : str                                   // 返回update表示交由Shell执行一条指令；
 class User_BNYYCS:
 
@@ -96,8 +97,8 @@ class User_BNYYCS:
         );
         return _ret
 
-    def update(self, recv, params = {}):
-        for c in recv:
+    def update(self, inps = [], params = {}):
+        for inp in inps:
             self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
             self.cmd = self.cmds[self.tab] if self.tab >= 0 else self.cmd;
         return None;

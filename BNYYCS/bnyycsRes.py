@@ -47,7 +47,7 @@ def splitres(res:str):
 #                                                       // 绘制的过程应当使用相对坐标，绘制前系统会清屏，光标归位左上；
 # .run(cmd:str, params)                                 // 向资源发送一条指令执行，
 #               : none                                  // params是Shell当前的环境参数；
-# .update(recv:bytes, params)                           // 向资源发送一次接受，params是Shell当前的环境参数，
+# .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : str                                   // 返回update表示交由Shell执行一条指令；
 
 class Resource:
@@ -111,7 +111,7 @@ class Res_RefusePage(Resource):
         );
         return _ret
     
-    def update(self, recv, params = {}):
+    def update(self, inps = [], params = {}):
         return;
 
     def run(self, cmd, params = {}):
@@ -167,7 +167,7 @@ class Res_SamplePage(Resource):
         );
         return _ret;
     
-    def update(self, recv, params = {}):
+    def update(self, inps = [], params = {}):
         return;
 
     def run(self, cmd, params = {}):
