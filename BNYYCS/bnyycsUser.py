@@ -114,10 +114,14 @@ class User_BNYYCS:
     
     def doup(self):
         self.tab = (self.tab) % (len(self.cmds) + 1) - 1;
+        if self.tab >= 0 and self.tab < len(self.cmds):
+            self._cmd = self.cmds[self.tab];
         return;
     
     def dodown(self):
         self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
+        if self.tab >= 0 and self.tab < len(self.cmds):
+            self._cmd = self.cmds[self.tab];
         return;
     
     def doesc(self):
