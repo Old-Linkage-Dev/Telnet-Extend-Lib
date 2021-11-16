@@ -122,10 +122,10 @@ class Shell_Refuse(threading.Thread):
 
     @property
     def _page(self):
-        _reason = self.reason if len(self.reason) <= 72 else self.reason[:69] + '...' if self.reason else b'NO REASON PRESENTED';
-        _lspace = b'%*s' % (math.ceil((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
-        _rspace = b'%*s' % (math.floor((72 - len(bytes(_reason, 'ascii'))) / 2), b'');
-        _midwords = bytes(_reason, 'ascii');
+        _reason = self.reason.encode(CHRSET_EXT);
+        _reason = (_reason if len(_reason) <= 72 else _reason[:69] + b'...') if _reason else b'NO REASON PRESENTED';
+        _lspace = b'%*s' % (math.ceil((72 - len(_reason)) / 2), b'');
+        _rspace = b'%*s' % (math.floor((72 - len(_reason)) / 2), b'');
         return b''.join([
         CHR_CLR,
         b'#==============================================================================#' + CHR_CRLF,
@@ -133,7 +133,7 @@ class Shell_Refuse(threading.Thread):
         b'|                                                                              |' + CHR_CRLF,
         b'| The atempt to visit this site is refused,                                    |' + CHR_CRLF,
         b'| The reason to the rufusing is:                                               |' + CHR_CRLF,
-        b'|   '                  + _lspace + _midwords + _rspace +                  b'   |' + CHR_CRLF,
+        b'|   '                   + _lspace + _reason + _rspace +                   b'   |' + CHR_CRLF,
         b'|                                                                              |' + CHR_CRLF,
         b'|                                                                              |' + CHR_CRLF,
         b'|                                                                              |' + CHR_CRLF,
