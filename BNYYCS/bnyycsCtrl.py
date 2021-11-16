@@ -3,7 +3,13 @@
 # 系统使用字符集，系统res、user、cmds等使用的字符集
 CHRSET_SYS  = 'ascii';
 # 系统期望的字符集，即对载入资源等str的解码方式
-CHRSET_EXT  = 'utf8';
+CHRSET_EXT = 'utf8';
+
+def SET_CHRSET_EXT(val):
+    global CHRSET_EXT;
+    CHRSET_EXT = val;
+
+
 
 # ASCII 非打印字符
 CHR_NONE    = b'';
