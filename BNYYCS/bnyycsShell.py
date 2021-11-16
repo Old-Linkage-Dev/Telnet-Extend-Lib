@@ -15,7 +15,7 @@ from .bnyycsLog import logger;
 from .bnyycsCtrl import *;
 
 __all__ = [
-    "Shell_BNYYCE",
+    "Shell_BNYYCS",
     "Shell_Refuse",
     "Shell_Echo",
     "Shell_Interactor",
@@ -31,7 +31,7 @@ __all__ = [
 #   name        : str                                   // 该用户的线程名称；
 #   maxidle     : float                                 // 该用户的最大空闲，超时下线；
 
-class Shell_BNYYCE(threading.Thread):
+class Shell_BNYYCS(threading.Thread):
 
     def __init__(self, conn, name = '', maxidle = 900) -> None:
         super().__init__();

@@ -51,7 +51,7 @@ serv = BNYYCS.BNYYCS(
     backlog = 4,
     poolsize = 16,
     block = True,
-    shellclass = BNYYCS.Shell_BNYYCE,
+    shellclass = BNYYCS.Shell_BNYYCS,
     maxidle = 300
 );
 
