@@ -4,7 +4,7 @@
 import math;
 
 from .bnyycsLog import logger;
-from .bnyyceCtrl import *;
+from .bnyycsCtrl import *;
 
 __all__ = [
     "splitres",

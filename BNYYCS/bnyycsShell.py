@@ -12,7 +12,7 @@ from . import bnyycsUser as User;
 from . import bnyycsRes as Res;
 
 from .bnyycsLog import logger;
-from .bnyyceCtrl import *;
+from .bnyycsCtrl import *;
 
 __all__ = [
     "Shell_BNYYCE",
