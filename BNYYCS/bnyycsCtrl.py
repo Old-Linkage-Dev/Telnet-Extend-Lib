@@ -375,4 +375,5 @@ class InputQueue:
         _chr = self.pop();
         while _chr:
             yield _chr;
+            _chr = self.pop();
         return;
