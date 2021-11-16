@@ -129,6 +129,8 @@ CHR_KEY_F10         = b'\x1b[21~';
 CHR_KEY_F11         = b'\x1b[23~';
 CHR_KEY_F12         = b'\x1b[24~';
 
+CHR_KEY_ESC         = b'\x1B';
+
 
 
 # CSI 控制字符
@@ -328,7 +330,7 @@ class InputQueue:
     
     def pop(self):
         if len(self._input) > 0:
-            if self._input[:1] == CHR_ESC:
+            if len(self._input) > 1 and self._input[:1] == CHR_ESC:
                 _i = 0;
                 if len(self._input) > 1 and self._input[:2] == CHR_RIS:
                     _i = 1;
@@ -343,6 +345,9 @@ class InputQueue:
                     return _chr;
                 else:
                     return b'';
+            elif len(self._input) == 1 and self._input[:1] == CHR_ESC:
+                _chr, self._input = self._input[:1], self._input[1:];
+                return _chr;
             elif self._input[:1] in CHRS_RETURN:
                 if len(self._input) > 1:
                     if self._input[:2] == CHR_CRLF:
