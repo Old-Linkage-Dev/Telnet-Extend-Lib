@@ -52,7 +52,7 @@ def splitres(res : bytes):
 
 class Resource:
     
-    def __init__(self, res = 'res::blank', params = {}) -> None:
+    def __init__(self, res = b'res::blank', params = {}) -> None:
         self.res = res;
         self.cmds = [];
         self.params = params;
