@@ -95,9 +95,54 @@ class User_BNYYCS:
             CHR_T_RST
         );
         return _ret
+    
+    def cmdmatch(self, cmd):
+        return -1;
+
+    def dotab(self):
+        _match = self.cmdmatch(self._cmd)
+        if _match == -1:
+            pass;
+        elif self.cmds[_match] == self.cmd:
+            self.tab = _match;
+        else:
+            self._cmd = self.cmds[_match];
+        return;
+    
+    def doup(self):
+        self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
+        return;
+    
+    def dodown(self):
+        self.tab = (self.tab) % (len(self.cmds) + 1) - 1;
+        return;
+    
+    def doesc(self):
+        self.tab = -1;
+        return;
+    
+    def dodel(self):
+        self._cmd = self._cmd[:-1];
+        return;
+    
+    def dotype(self, chr):
+        self._cmd = self._cmd + chr;
+        return;
 
     def update(self, inps = [], params = {}):
         for inp in inps:
-            self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
-            self.cmd = self.cmds[self.tab] if self.tab >= 0 else self.cmd;
+            if inp == CHR_KEY_TAB:
+                self.dotab();
+            elif inp == CHR_KEY_UP:
+                self.doup();
+            elif inp == CHR_KEY_DOWN:
+                self.dodown();
+            elif inp == CHR_KEY_BS or inp == CHR_KEY_DEL:
+                self.dodel();
+            elif inp == CHR_KEY_ESC:
+                self.doesc();
+            elif inp in CHRS_C0:
+                pass;
+            else:
+                self.dotype(inp);
         return None;
