@@ -148,8 +148,10 @@ class User_BNYYCS:
                 self.dodel();
             elif inp == CHR_KEY_ESC:
                 self.doesc();
-            elif inp in CHRS_C0:
-                pass;
-            else:
+            elif inp in CHRS_PRINT + CHRS_EXT:
                 self.dotype(inp);
+            elif inp in CHRS_RETURN:
+                _ret = self._cmd;
+                self._cmd = b'';
+                return _ret;
         return None;
