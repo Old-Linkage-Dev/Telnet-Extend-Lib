@@ -157,7 +157,7 @@ class Res_SamplePage(Resource):
             b'|                                                                              |' + CHR_CRLF +
             b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |' + CHR_CRLF +
             b'#==============================================================================#' + CHR_CRLF +
-            CHRf_CSI_CUMOV(-15, 3) + _elem_lastcmd + CHR_CRLF +
+            CHRf_CSI_CUMOV(-15, 4) + _elem_lastcmd + CHR_CRLF +
             CHRf_CSI_CUMOV(4, 35) + _elem_test + CHR_CRLF +
             CHRf_CSI_CUMOV(1, 35) + _elem_help + CHR_CRLF +
             CHRf_CSI_CUMOV(1, 35) + _elem_back + CHR_CRLF +
