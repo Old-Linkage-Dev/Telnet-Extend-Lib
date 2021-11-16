@@ -16,9 +16,7 @@ from .bnyycsRes import *;
 
 
 __all__ = (
-  [
-    "InputQueue",
-  ]
+  ["InputQueue"]
   + _bnyycs_main.__all__
   + _bnyyce_shell.__all__
   + _bnyycs_user.__all__
