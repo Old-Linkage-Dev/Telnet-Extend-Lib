@@ -1,4 +1,10 @@
 
+# 定义适用字符集
+# 系统使用字符集，系统res、user、cmds等使用的字符集
+CHRSET_SYS  = 'ascii';
+# 系统期望的字符集，即对载入资源等str的解码方式
+CHRSET_EXT  = 'utf8';
+
 # ASCII 非打印字符
 CHR_NONE    = b'';
 CHR_NUL     = b'\x00';
