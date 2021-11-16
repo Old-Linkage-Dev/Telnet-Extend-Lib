@@ -324,7 +324,9 @@ class InputQueue:
         if len(self._input) > 0:
             if self._input[:1] == CHR_ESC:
                 _i = 0;
-                if len(self._input) > 1 and self._input[1:2] in CHRS_ESC_END:
+                if len(self._input) > 1 and self._input[:2] == CHR_RIS:
+                    _i = 1;
+                elif len(self._input) > 1 and self._input[1:2] in CHRS_ESC_END:
                     _i = 1;
                     if _i < len(self._input) and self._input[:2] == CHR_CSI_START:
                         _i = 2;
