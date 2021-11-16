@@ -98,7 +98,7 @@ class Shell_BNYYCE(threading.Thread):
                     self.draw();
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
-        except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
             self.conn.close();
             logger.info('User [%s] connection aborted.' % self.name);
         except Exception as err:
@@ -216,7 +216,7 @@ class Shell_Echo(threading.Thread):
                         logger.info('User [%s] input <%s>, ansi : <%s>, utf-8 : <%s>' % (self.name, str(r), r.decode('ansi'), r.decode('utf-8')));
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
-        except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
             self.conn.close();
             logger.info('User [%s] connection aborted.' % self.name);
         except Exception as err:
@@ -274,7 +274,7 @@ class Shell_Interactor(threading.Thread):
                         if r:
                             self.pipein.write(r);
                     self.stop();
-                except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+                except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
                     self.stop();
                     self.conn.close();
                     self.pipein.close();
@@ -326,7 +326,7 @@ class Shell_Interactor(threading.Thread):
             self.proc.kill();
             self._subinput.join(timeout = 2);
             time.sleep(2);
-        except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
             self.stop();
             self.conn.close();
             self.pipein.close();
@@ -408,7 +408,7 @@ class Shell_Caster(threading.Thread):
             self.pipe.close();
             self.proc.kill();
             time.sleep(2);
-        except BrokenPipeError or ConnectionAbortedError or ConnectionResetError as err:
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
             self.conn.close();
             self.pipe.close();
             self.proc.kill();
