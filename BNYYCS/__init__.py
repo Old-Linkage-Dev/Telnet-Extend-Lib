@@ -3,9 +3,11 @@ from . import bnyycsMain as _bnyycs_main;
 from . import bnyycsShell as _bnyyce_shell;
 from . import bnyycsUser as _bnyycs_user;
 from . import bnyycsRes as _bnyycs_res;
+from . import bnyycsCtrl as _bnyycs_ctrl;
 from . import bnyycsLog as _bnyycs_log;
 
 from .bnyycsLog import logger;
+from .bnyycsCtrl import InputQueue;
 from .bnyycsMain import *;
 from .bnyycsShell import *;
 from .bnyycsUser import *;
@@ -14,7 +16,10 @@ from .bnyycsRes import *;
 
 
 __all__ = (
-    _bnyycs_main.__all__
+  [
+    "InputQueue",
+  ]
+  + _bnyycs_main.__all__
   + _bnyyce_shell.__all__
   + _bnyycs_user.__all__
   + _bnyycs_res.__all__

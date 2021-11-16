@@ -49,7 +49,7 @@ CHRS_C1 = (
     b'\x98\x99\x9A\x9B\x9C\x9D\x9E\x9F'
 );
 
-CHRS_NONPRT = (CHRS_C0, CHR_DEL, CHRS_C1);
+CHRS_NONPRT = CHRS_C0 + CHR_DEL + CHRS_C1;
 
 
 
@@ -83,49 +83,61 @@ CHRS_EXT = (
 
 
 
+# 一般控制字符
+CHR_RIS             = CHR_ESC + b'c';
+CHR_CRLF            = CHR_CR + CHR_LF;
+CHR_CLR             = CHR_RIS;
+CHRS_ESC_END        = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
+CHRS_RETURN         = (b'\r\n', b'\r', b'\n');
+
+
+
 # 输入控制字符
-CHR_KEY_UP = b'\x1b[A';
-CHR_KEY_DOWN = b'\x1b[B';
-CHR_KEY_LEFT = b'\x1b[D';
-CHR_KEY_RIGHT = b'\x1b[C';
+CHR_KEY_UP          = b'\x1b[A';
+CHR_KEY_DOWN        = b'\x1b[B';
+CHR_KEY_LEFT        = b'\x1b[D';
+CHR_KEY_RIGHT       = b'\x1b[C';
 
-CHR_KEY_BS = b'\x08';
-CHR_KEY_TAB = b'\x09';
-CHR_KEY_SP = b'\x20';
-CHR_KEY_DEL = b'\x7f';
+CHR_KEY_BS          = b'\x08';
+CHR_KEY_TAB         = b'\x09';
+CHR_KEY_SP          = b'\x20';
+CHR_KEY_DEL         = b'\x7f';
 
-CHR_KEY_HOME = b'\x1b[1~';
-CHR_KEY_END = b'\x1b[4~';
-CHR_KEY_PGUP = b'\x1b[5~';
-CHR_KEY_PGDN = b'\x1b[6~';
-CHR_KEY_INS = b'\x1b[2~';
+CHR_KEY_HOME        = b'\x1b[1~';
+CHR_KEY_END         = b'\x1b[4~';
+CHR_KEY_PGUP        = b'\x1b[5~';
+CHR_KEY_PGDN        = b'\x1b[6~';
+CHR_KEY_INS         = b'\x1b[2~';
 
-#CHR_KEY_F1 = b'\x1bOP';
-#CHR_KEY_F2 = b'\x1bOQ';
-#CHR_KEY_F3 = b'\x1bOR';
-#CHR_KEY_F4 = b'\x1bOS';
-#CHR_KEY_F5 = b'\x1b[15~';
-#CHR_KEY_F7 = b'\x1b[18~';
-#CHR_KEY_F9 = b'\x1b[20~';
-#CHR_KEY_F10 = b'\x1b[21~';
-#CHR_KEY_F11 = b'\x1b[23~';
-#CHR_KEY_F12 = b'\x1b[24~';
+CHR_KEY_F1          = b'\x1b[11~';
+CHR_KEY_F2          = b'\x1b[12~';
+CHR_KEY_F3          = b'\x1b[13~';
+CHR_KEY_F4          = b'\x1b[14~';
+CHR_KEY_F5          = b'\x1b[15~';
+CHR_KEY_F6          = b'\x1b[16~';
+
+CHR_KEY_F7          = b'\x1b[18~';
+CHR_KEY_F8          = b'\x1b[19~';
+CHR_KEY_F9          = b'\x1b[20~';
+CHR_KEY_F10         = b'\x1b[21~';
+CHR_KEY_F11         = b'\x1b[23~';
+CHR_KEY_F12         = b'\x1b[24~';
 
 
 
 # CSI 控制字符
-CHR_CSI_START = CHR_ESC + b'[';
-CHRS_CSI_MID = b' !"#$%&\'()*+,-./';
-CHRS_CSI_PARAM = b'0123456789:;<=>?';
-CHRS_CSI_FIN = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
+CHR_CSI_START       = CHR_ESC + b'[';
+CHRS_CSI_MID        = b' !"#$%&\'()*+,-./';
+CHRS_CSI_PARAM      = b'0123456789:;<=>?';
+CHRS_CSI_END        = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~';
 
-CHR_CSI_CUU = CHR_CSI_START + b'A';
-CHR_CSI_CUD = CHR_CSI_START + b'B';
-CHR_CSI_CUF = CHR_CSI_START + b'C';
-CHR_CSI_CUB = CHR_CSI_START + b'D';
-CHR_CSI_CUP = CHR_CSI_START + b'H';
-CHR_CSI_HVP = CHR_CSI_START + b'f';
-CHR_CSI_SGR = CHR_CSI_START + b'm';
+CHR_CSI_CUU         = CHR_CSI_START + b'A';
+CHR_CSI_CUD         = CHR_CSI_START + b'B';
+CHR_CSI_CUF         = CHR_CSI_START + b'C';
+CHR_CSI_CUB         = CHR_CSI_START + b'D';
+CHR_CSI_CUP         = CHR_CSI_START + b'H';
+CHR_CSI_HVP         = CHR_CSI_START + b'f';
+CHR_CSI_SGR         = CHR_CSI_START + b'm';
 
 def CHRf_CSI_CUU(n):
     assert 0 < n < 32768;
@@ -171,15 +183,7 @@ def CHRf_CSI_SGR(*args):
 
 
 
-# RIS 控制字符
-CHR_RIS = CHR_ESC + b'c';
-
-
-
-# 其他
-CHR_CRLF            = CHR_CR + CHR_LF;
-CHR_CLR             = CHR_RIS;
-
+# 字体
 CHR_T_RST           = CHR_CSI_SGR;
 
 CHR_T_BOLD          = CHRf_CSI_SGR(1);
@@ -306,3 +310,39 @@ T_BLMAGEN           = 105;
 T_BLCYAN            = 106;
 T_BLWHITE           = 107;
 T_BRST              = 49;
+
+class InputQueue:
+    def __init__(self) -> None:
+        self._input = b'';
+        return;
+    
+    def push(self, inp):
+        self._input += inp;
+        return;
+    
+    def pop(self):
+        if len(self._input) > 0:
+            if self._input[0] == CHR_ESC:
+                _i = 1;
+                while _i < len(self._input) and self._input[_i] not in CHRS_ESC_END:
+                    _i += 1;
+                if _i < len(self._input) and self._input[:_i-1] == CHR_CSI_START:
+                    while _i < len(self._input) and self._input[_i] not in CHRS_CSI_END:
+                        _i += 1;
+                if _i < len(self._input):
+                    _chr, self._input = self._input[:_i + 1], self._input[_i + 1:];
+                else:
+                    return b'';
+            elif self._input[0] in CHRS_RETURN:
+                if len(self._input) > 1:
+                    if self._input[:2] == CHR_CRLF:
+                        _chr, self._input = self._input[:2], self._input[2:];
+                        return _chr;
+                    else:
+                        _chr, self._input = self._input[0], self._input[1:];
+                        return _chr;
+            else:
+                _chr, self._input = self._input[0], self._input[1:];
+                return _chr;
+        else:
+            return b'';
