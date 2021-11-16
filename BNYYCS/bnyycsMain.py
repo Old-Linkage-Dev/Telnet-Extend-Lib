@@ -35,7 +35,7 @@ __all__ = [
 
 class BNYYCS:
 
-    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, poolsize = 16, block = True, shellclass = Shell.Shell_BNYYCE, **kwargs) -> None:
+    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, poolsize = 16, block = True, shellclass = Shell.Shell_BNYYCS, **kwargs) -> None:
         self.host = host;
         self.port = port;
         self.backlog = backlog;
