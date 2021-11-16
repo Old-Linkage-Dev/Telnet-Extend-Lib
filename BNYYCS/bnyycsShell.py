@@ -64,6 +64,7 @@ class Shell_BNYYCS(threading.Thread):
         self.user.cmds = self.res.cmds;
     
     def updateuser(self, inps):
+        self.user.cmds = self.res.cmds;
         update = self.user.update(inps = inps, params = self.params);
         if update:
             self.timestamp = time.time();
