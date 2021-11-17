@@ -351,11 +351,24 @@ TEL_OP_ECHO         = b'\x01';
 TEL_OP_SPRGA        = b'\x03';
 TEL_OP_NAWS         = b'\x1F';
 
-TEL_CMD_SB          = TEL_IAC + TEL_SB;
 TEL_CMD_SE          = TEL_IAC + TEL_SE;
+TEL_CMD_NOP         = TEL_IAC + TEL_NOP;
+TEL_CMD_DM          = TEL_IAC + TEL_DM;
+TEL_CMD_BRK         = TEL_IAC + TEL_BRK;
+TEL_CMD_IP          = TEL_IAC + TEL_IP;
+TEL_CMD_AO          = TEL_IAC + TEL_AO;
+TEL_CMD_AYT         = TEL_IAC + TEL_AYT;
+TEL_CMD_EC          = TEL_IAC + TEL_EC;
+TEL_CMD_EL          = TEL_IAC + TEL_EL;
+TEL_CMD_GA          = TEL_IAC + TEL_GA;
+TEL_CMD_SB          = TEL_IAC + TEL_SB;
+TEL_CMD_WILL        = TEL_IAC + TEL_WILL;
+TEL_CMD_WONT        = TEL_IAC + TEL_WONT;
+TEL_CMD_DO          = TEL_IAC + TEL_DO;
+TEL_CMD_DONT        = TEL_IAC + TEL_DONT;
 
-TELS_OPFORE         = (TEL_WILL, TEL_WONT, TEL_DO, TEL_DONT);
-TELS_OPWITHSUB      = (TEL_WILL + TEL_OP_NAWS, );
+TELS_OPFORE         = (TEL_CMD_WILL, TEL_CMD_WONT, TEL_CMD_DO, TEL_CMD_DONT);
+TELS_OPWITHSUB      = (TEL_CMD_WILL + TEL_OP_NAWS, );
 
 def TELf_CMD(cmd):
     assert type(cmd) == bytes;
@@ -393,15 +406,15 @@ class TelnetInputQueue:
         if len(self._input) <= 1:
             return b'';
         else:
-            if self._input[1:2] in TELS_OPFORE and len(self._input) < 3:
+            if self._input[:2] in TELS_OPFORE and len(self._input) < 3:
                 return b'';
-            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] not in TELS_OPWITHSUB:
+            elif self._input[:2] in TELS_OPFORE and self._input[:3] not in TELS_OPWITHSUB:
                 return self.popchar(3);
-            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and len(self._input) < 5:
+            elif self._input[:2] in TELS_OPFORE and self._input[:3] in TELS_OPWITHSUB and len(self._input) < 5:
                 return b'';
-            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and self._input[3:5] != TEL_CMD_SB:
+            elif self._input[:2] in TELS_OPFORE and self._input[:3] in TELS_OPWITHSUB and self._input[3:5] != TEL_CMD_SB:
                 return self.popchar(3);
-            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and self._input[3:5] == TEL_CMD_SB:
+            elif self._input[:2] in TELS_OPFORE and self._input[:3] in TELS_OPWITHSUB and self._input[3:5] == TEL_CMD_SB:
                 _i = 5;
                 while _i + 1 < len(self._input) and self._input[_i:_i+2] != TEL_CMD_SE:
                     _i += 1;
