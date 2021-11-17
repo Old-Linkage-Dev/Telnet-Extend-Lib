@@ -131,6 +131,13 @@ class User_BNYYCS:
             self._cmd = self.cmds[self.tab];
         return;
     
+    def dohome(self):
+        self.tab = 0;
+        return;
+    
+    def doend(self):
+        self.tab = len(self.cmds) - 1;
+
     def doesc(self):
         self.tab = -1;
         return;
@@ -153,6 +160,10 @@ class User_BNYYCS:
                 self.dodown();
             elif inp == CHR_KEY_BS or inp == CHR_KEY_DEL:
                 self.dodel();
+            elif inp == CHR_KEY_HOME:
+                self.dohome();
+            elif inp == CHR_KEY_END:
+                self.doend();
             elif inp == CHR_KEY_ESC:
                 self.doesc();
             elif inp in CHRS_PRINT + CHRS_EXT:
