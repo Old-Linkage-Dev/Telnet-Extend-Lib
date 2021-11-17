@@ -380,46 +380,80 @@ class TelnetInputQueue:
         self._input += inp;
         return;
     
-    def pop(self):
-        if len(self._input) > 0:
-            if len(self._input) > 1 and self._input[:1] == CHR_ESC:
-                _i = 0;
-                if len(self._input) > 1 and self._input[:2] == CHR_RIS:
-                    _i = 1;
-                elif len(self._input) > 1 and self._input[1:2] in CHRS_ESC_END:
-                    _i = 1;
-                    if _i < len(self._input) and self._input[:2] == CHR_CSI_START:
-                        _i = 2;
-                        while _i < len(self._input) and self._input[_i:_i+1] not in CHRS_CSI_END:
-                            _i += 1;
-                if _i < len(self._input):
-                    _chr, self._input = self._input[:_i+1], self._input[_i+1:];
-                    return _chr;
-                else:
-                    return b'';
-            elif len(self._input) == 1 and self._input[:1] == CHR_ESC:
-                _chr, self._input = self._input[:1], self._input[1:];
-                return _chr;
-            elif self._input[:1] in CHRS_RETURN:
-                if len(self._input) > 1:
-                    if self._input[:2] == CHR_CRLF:
-                        _chr, self._input = self._input[:2], self._input[2:];
-                        return _chr;
-                    elif self._input[:2] == CHR_CRNUL:
-                        # To deal with the CR NUL defined in rfc854 page 11.
-                        _chr, self._input = self._input[:2], self._input[2:];
-                        return _chr;
-                    else:
-                        _chr, self._input = self._input[:1], self._input[1:];
-                        return _chr;
-                else:
-                    _chr, self._input = self._input[:1], self._input[1:];
-                    return _chr;
-            else:
-                _chr, self._input = self._input[:1], self._input[1:];
-                return _chr;
-        else:
+    def popchar(self, l = 1):
+        if len(self._input) < l:
             return b'';
+        else:
+            _chr, self._input = self._input[:l], self._input[l:];
+            return _chr;
+
+    def poptelcmd(self):
+        if self._input[:1] != TEL_IAC:
+            return b'';
+        if len(self._input) <= 1:
+            return b'';
+        else:
+            if self._input[1:2] in TELS_OPFORE and len(self._input) < 3:
+                return b'';
+            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] not in TELS_OPWITHSUB:
+                return self.popchar(3);
+            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and len(self._input) < 5:
+                return b'';
+            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and self._input[3:5] != TEL_CMD_SB:
+                return self.popchar(3);
+            elif self._input[1:2] in TELS_OPFORE and self._input[1:3] in TELS_OPWITHSUB and self._input[3:5] == TEL_CMD_SB:
+                _i = 5;
+                while _i + 1 < len(self._input) and self._input[_i:_i+2] != TEL_CMD_SE:
+                    _i += 1;
+                return self.popchar(_i + 1);
+    
+    def popesc(self):
+        if self._input[:1] != CHR_ESC:
+            return b'';
+        if len(self._input) == 0:
+            return b'';
+        elif len(self._input) == 1:
+            return self.popchar();
+        else:
+            if self._input[:2] == CHR_RIS:
+                return self.popchar(2);
+            elif self._input[1:2] not in CHRS_ESC_END:
+                return self.popchar();
+            elif self._input[1:2] in CHRS_ESC_END and self._input[:2] != CHR_CSI_START:
+                return self.popchar(2);
+            elif self._input[1:2] in CHRS_ESC_END and self._input[:2] == CHR_CSI_START:
+                _i = 2;
+                while _i < len(self._input) and self._input[_i:_i+1] not in CHRS_CSI_END:
+                    _i += 1;
+                return self.popchar(_i + 1);
+    
+    def popreturn(self):
+        if self._input[:1] not in CHRS_RETURN:
+            return b'';
+        if len(self._input) == 0:
+            return b'';
+        elif len(self._input) == 1:
+            return self.popchar();
+        else:
+            if self._input[:2] == CHR_CRLF:
+                return self.popchar(2);
+            elif self._input[:2] == CHR_CRNUL:
+                # To deal with the CR NUL defined in rfc854 page 11.
+                return self.popchar(2);
+            else:
+                return self.popchar();
+
+    def pop(self):
+        if len(self._input) == 0:
+            return b'';
+        elif self._input[:1] == TEL_IAC:
+            return self.poptelcmd();
+        elif self._input[:1] == CHR_ESC:
+            return self.popesc();
+        elif self._input[:1] in CHRS_RETURN:
+            return self.popreturn();
+        else:
+            return self.popchar();
     
     def pops(self):
         _chr = self.pop();
