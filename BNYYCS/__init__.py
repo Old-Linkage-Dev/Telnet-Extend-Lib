@@ -7,7 +7,7 @@ from . import bnyycsCtrl as _bnyycs_ctrl;
 from . import bnyycsLog as _bnyycs_log;
 
 from .bnyycsLog import logger;
-from .bnyycsCtrl import InputQueue;
+from .bnyycsCtrl import TelnetInputQueue;
 from .bnyycsMain import *;
 from .bnyycsShell import *;
 from .bnyycsUser import *;
@@ -16,7 +16,7 @@ from .bnyycsRes import *;
 
 
 __all__ = (
-  ["InputQueue"]
+  ["TelnetInputQueue"]
   + _bnyycs_main.__all__
   + _bnyyce_shell.__all__
   + _bnyycs_user.__all__

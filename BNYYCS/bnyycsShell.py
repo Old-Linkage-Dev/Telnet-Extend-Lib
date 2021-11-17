@@ -41,7 +41,7 @@ class Shell_BNYYCS(threading.Thread):
         self.params = {};
         self.user = User.User_BNYYCS();
         self.res = Res.Res_SamplePage();
-        self.iq = InputQueue();
+        self.iq = TelnetInputQueue();
         self.timestamp = time.time();
         self._flagstop = False;
         return;

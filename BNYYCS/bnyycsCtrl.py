@@ -326,7 +326,10 @@ T_BLCYAN            = 106;
 T_BLWHITE           = 107;
 T_BRST              = 49;
 
-class InputQueue:
+
+
+# 用于Telnet接到的数据的重整的类
+class TelnetInputQueue:
     def __init__(self) -> None:
         self._input = b'';
         return;
