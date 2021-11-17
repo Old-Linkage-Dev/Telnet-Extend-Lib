@@ -280,15 +280,15 @@ CHR_T_DEUPLIN       = CHRf_CSI_SGR(54);
 def CHRf_T(*args):
     return CHR_CSI_START + b';'.join([bytes(str(arg), CHRSET_SYS) for arg in args]) + b'm';
 
-T_BOLD          = 1;
-T_UNDLIN        = 4;
-T_BLINK         = 5;
-T_REVERS        = 7;
+T_BOLD              = 1;
+T_UNDLIN            = 4;
+T_BLINK             = 5;
+T_REVERS            = 7;
 
-T_DEBOLD        = 22;
-T_DEUNDLIN      = 24;
-T_DEBLINK       = 25;
-T_DEREVERS      = 27;
+T_DEBOLD            = 22;
+T_DEUNDLIN          = 24;
+T_DEBLINK           = 25;
+T_DEREVERS          = 27;
 
 T_BLACK             = 30;
 T_RED               = 31;
