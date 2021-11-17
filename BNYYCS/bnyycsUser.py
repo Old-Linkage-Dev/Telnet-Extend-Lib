@@ -156,7 +156,7 @@ class User_BNYYCS:
                 self.dotab();
             elif inp == CHR_KEY_UP:
                 self.doup();
-            elif inp == CHR_KEY_DOWN:
+            elif inp == CHR_KEY_DOWN or inp == CHR_CRNUL:
                 self.dodown();
             elif inp == CHR_KEY_BS or inp == CHR_KEY_DEL:
                 self.dodel();

@@ -98,9 +98,10 @@ CHRS_EXT = (
 # 一般控制字符
 CHR_RIS             = CHR_ESC + b'c';
 CHR_CRLF            = CHR_CR + CHR_LF;
+CHR_CRNUL           = CHR_CR + CHR_NUL;
 CHR_CLR             = CHR_RIS;
 CHRS_ESC_END        = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
-CHRS_RETURN         = (b'\r\n', b'\r', b'\n');
+CHRS_RETURN         = (CHR_CRLF, CHR_CRNUL, CHR_CR, CHR_LF);
 
 
 
@@ -357,6 +358,10 @@ class InputQueue:
             elif self._input[:1] in CHRS_RETURN:
                 if len(self._input) > 1:
                     if self._input[:2] == CHR_CRLF:
+                        _chr, self._input = self._input[:2], self._input[2:];
+                        return _chr;
+                    elif self._input[:2] == CHR_CRNUL:
+                        # To deal with the CR NUL defined in rfc854 page 11.
                         _chr, self._input = self._input[:2], self._input[2:];
                         return _chr;
                     else:
