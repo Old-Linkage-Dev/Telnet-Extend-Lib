@@ -135,6 +135,14 @@ class User_BNYYCS:
             self._cmd = self.cmds[self.tab];
         return;
     
+    def doright(self):
+        self._cmd = b'next';
+        return;
+    
+    def doleft(self):
+        self._cmd = b'back';
+        return;
+    
     def dohome(self):
         self.tab = 0;
         return;
@@ -162,6 +170,10 @@ class User_BNYYCS:
                 self.doup();
             elif inp == CHR_KEY_DOWN or inp == CHR_CRNUL:
                 self.dodown();
+            elif inp == CHR_KEY_RIGHT:
+                self.doright();
+            elif inp == CHR_KEY_LEFT:
+                self.doleft();
             elif inp == CHR_KEY_BS or inp == CHR_KEY_DEL:
                 self.dodel();
             elif inp == CHR_KEY_HOME:
