@@ -328,6 +328,48 @@ T_BRST              = 49;
 
 
 
+# Telnet 控制字符
+TEL_NULL            = b'\x00';
+TEL_SE              = b'\xF0';
+TEL_NOP             = b'\xF1';
+TEL_DM              = b'\xF2';
+TEL_BRK             = b'\xF3';
+TEL_IP              = b'\xF4';
+TEL_AO              = b'\xF5';
+TEL_AYT             = b'\xF6';
+TEL_EC              = b'\xF7';
+TEL_EL              = b'\xF8';
+TEL_GA              = b'\xF9';
+TEL_SB              = b'\xFA';
+TEL_WILL            = b'\xFB';
+TEL_WONT            = b'\xFC';
+TEL_DO              = b'\xFD';
+TEL_DONT            = b'\xFE';
+TEL_IAC             = b'\xFF';
+
+TEL_OP_ECHO         = b'\x01';
+TEL_OP_SPRGA        = b'\x03';
+TEL_OP_NAWS         = b'\x1F';
+
+TEL_CMD_SB          = TEL_IAC + TEL_SB;
+TEL_CMD_SE          = TEL_IAC + TEL_SE;
+
+TELS_OPFORE         = (TEL_WILL, TEL_WONT, TEL_DO, TEL_DONT);
+TELS_OPWITHSUB      = (TEL_WILL + TEL_OP_NAWS, );
+
+def TELf_CMD(cmd):
+    assert type(cmd) == bytes;
+    return TEL_IAC + cmd;
+
+def TELf_SB(*args):
+    _ret = TEL_IAC + TEL_SB;
+    for _val in args:
+        assert type(_val) == bytes;
+        _ret += _val;
+    _ret += TEL_IAC + TEL_SE;
+
+
+
 # 用于Telnet接到的数据的重整的类
 class TelnetInputQueue:
     def __init__(self) -> None:
