@@ -419,6 +419,13 @@ class TelnetInputQueue:
                 while _i + 1 < len(self._input) and self._input[_i:_i+2] != TEL_CMD_SE:
                     _i += 1;
                 return self.popchar(_i + 1);
+            elif self._input[:2] == TEL_CMD_SB:
+                _i = 2;
+                while _i + 1 < len(self._input) and self._input[_i:_i+2] != TEL_CMD_SE:
+                    _i += 1;
+                return self.popchar(_i + 1);
+            else:
+                return self.popchar(2);
     
     def popesc(self):
         if self._input[:1] != CHR_ESC:
