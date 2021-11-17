@@ -93,7 +93,21 @@ class Shell_BNYYCS(threading.Thread):
                     recv = None;
                 if recv:
                     self.iq.push(recv);
-                    chrs = [chr for chr in self.iq.pops()];
+                    chrs = [];
+                    for chr in self.iq.pops():
+                        if chr[:1] == TEL_IAC:
+                            # 需要添加对 TELNET CMD 的处置
+                            if len(chr) <= 1:
+                                pass;
+                            elif chr[:2] in TELS_OPFORE:
+                                pass;
+                            elif chr[:2] == TEL_CMD_SB:
+                                pass;
+                            else:
+                                pass;
+                            pass;
+                        else:
+                            chrs.append(chr);
                     # 对于此处是否应该对两者进行同步更新是需要继续讨论的；
                     self.updateuser(chrs);
                     self.updateres(chrs);
