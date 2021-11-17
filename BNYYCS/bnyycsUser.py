@@ -97,10 +97,13 @@ class User_BNYYCS:
         return _ret
     
     def cmdmatch(self, cmd):
-        for _match in range(len(self.cmds)):
-            if cmd == self.cmds[_match][:len(cmd)]:
-                return _match;
-        return -1;
+        if cmd == b'':
+            return self.tab;
+        else:
+            for _match in range(len(self.cmds)):
+                if cmd == self.cmds[_match][:len(cmd)]:
+                    return _match;
+            return -1;
 
     def dotab(self):
         _match = self.cmdmatch(self._cmd)
