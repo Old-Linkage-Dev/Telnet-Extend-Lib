@@ -46,7 +46,7 @@ def splitres(res : bytes):
 #                                                       // 一个res应当只绘制屏幕上部80x20的区域，一方面这有利于避免绘制(80,24)后的换行推出屏幕，
 #                                                       // 另一方面因为Shell中可能会通过其他调用在画面下部绘制辅助内容，
 #                                                       // 绘制的过程应当使用相对坐标，绘制前系统会清屏，光标归位左上；
-# .run(cmd:bytes, params)                               // 向资源发送一条指令执行，
+# .run(cmd:bytes, *args, params)                        // 向资源发送一条指令执行，args是指令带入的参数
 #               : none                                  // params是Shell当前的环境参数；
 # .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : bytes                                 // 返回update表示交由Shell执行一条指令；
@@ -62,7 +62,7 @@ class Resource:
     def draw(self, tab, params = {}):
         return;
     
-    def run(self, cmd, params = {}):
+    def run(self, cmd, *args, params = {}):
         return;
     
     def update(self, recv, params = {}):
@@ -114,7 +114,7 @@ class Res_RefusePage(Resource):
     def update(self, inps = [], params = {}):
         return;
 
-    def run(self, cmd, params = {}):
+    def run(self, cmd, *args, params = {}):
         return;
 
 
@@ -169,7 +169,7 @@ class Res_SamplePage(Resource):
     def update(self, inps = [], params = {}):
         return;
 
-    def run(self, cmd, params = {}):
+    def run(self, cmd, *args, params = {}):
         self._lastcmd = cmd;
         return;
 
