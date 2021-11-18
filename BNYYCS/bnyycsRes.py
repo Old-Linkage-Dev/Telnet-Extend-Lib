@@ -26,6 +26,7 @@ __all__ = [
 # 去除头部res标准，返回各个分段；
 
 def splitres(res : bytes):
+    assert type(res) == bytes;
     s = res.split(b':');
     assert s[0] == b'res';
     return s[1:];
