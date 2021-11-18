@@ -101,12 +101,22 @@ class Shell_BNYYCS(threading.Thread):
         elif _cmd == b'put':
             self.put(*_args);
         else:
-            self.res.run(command, self.params);
+            try:
+                self.res.run(command, self.params);
+            except Exception as err:
+                logger.error(err);
+                logger.error('User [%s] res run failed.' % self.name);
+                logger.debug(traceback.format_exc());
             self.user.cmds = self.res.cmds;
         return;
 
     def updateres(self, inps):
-        update = self.res.update(inps = inps, params = self.params);
+        try:
+            update = self.res.update(inps = inps, params = self.params);
+        except Exception as err:
+            logger.error(err);
+            logger.error('User [%s] res update failed.' % self.name);
+            logger.debug(traceback.format_exc());
         if update:
             logger.info('User [%s] res updated "%s"' % (self.name, update));
             self.cmd(update);
@@ -115,7 +125,12 @@ class Shell_BNYYCS(threading.Thread):
     
     def updateuser(self, inps):
         self.user.cmds = self.res.cmds;
-        update = self.user.update(inps = inps, params = self.params);
+        try:
+            update = self.user.update(inps = inps, params = self.params);
+        except Exception as err:
+            logger.error(err);
+            logger.error('User [%s] update failed.' % self.name);
+            logger.debug(traceback.format_exc());
         if update:
             self.timestamp = time.time();
             logger.info('User [%s] updated "%s"' % (self.name, update));
