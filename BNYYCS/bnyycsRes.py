@@ -8,6 +8,8 @@ from .bnyycsCtrl import *;
 
 __all__ = [
     "splitres",
+    "ResLoader"
+    "ResLoader_BNYYCS",
     "Resource",
     "Res_RefusePage",
     "Res_SamplePage",
@@ -30,6 +32,34 @@ def splitres(res : bytes):
     s = res.split(b':');
     assert s[0] == b'res';
     return s[1:];
+
+
+
+# ResLoader()
+# ResLoader的基类，是用于资源加载的类，管理各个Res，
+# 应当能够提供动态的加载，使得文件的更新可以在线加载，
+# 建议是一个单例模式的类，以便实现以上功能；
+class ResLoader:
+
+    def __init__(self) -> None:
+        return;
+    
+    def getres(self, res):
+        return Resource();
+
+
+
+# ResLoader_BNYYCS()
+# 用于资源加载的类，管理各个Res，
+# 应当能够提供动态的加载，使得文件的更新可以在线加载，
+# 建议是一个单例模式的类，以便实现以上功能；
+class ResLoader_BNYYCS(ResLoader):
+
+    def __init__(self) -> None:
+        return;
+    
+    def getres(self, res):
+        return Res_SamplePage();
 
 
 
