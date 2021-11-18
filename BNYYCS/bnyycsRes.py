@@ -46,6 +46,9 @@ class ResLoader:
     
     def getres(self, res, params = {}):
         return Resource(res = res, params = params);
+    
+    def nextres(self, res):
+        return b'res::blank';
 
 
 
@@ -59,6 +62,9 @@ class ResLoader_BNYYCS(ResLoader):
         return;
     
     def getres(self, res, params = {}):
+        return Res_SamplePage(res = res, params = params);
+    
+    def getnext(self, res, params = {}):
         return Res_SamplePage(res = res, params = params);
 
 
