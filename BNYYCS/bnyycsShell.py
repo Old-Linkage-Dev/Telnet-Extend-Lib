@@ -93,25 +93,35 @@ class Shell_BNYYCS(threading.Thread):
     
 
 
+    # 网站顶级指令集合
+
+    # 退出网站
+    def cmdquit(self, *args):
         self.stop();
         return;
 
-    def back(self, *args):
+    # 访问历史记录的上一条资源
+    def cmdback(self, *args):
         return;
     
-    def next(self, *args):
+    # 访问当前资源逻辑上的下一条资源
+    def cmdnext(self, *args):
         return;
 
-    def help(self, *args):
+    # 访问承载帮助信息的资源
+    def cmdhelp(self, *args):
         return;
     
-    def visit(self, *args):
+    # 访问一条res指向的资源
+    def cmdvisit(self, *args):
         return;
     
-    def get(self, *args):
+    # 未设计功能
+    def cmdget(self, *args):
         return;
     
-    def set(self, *args):
+    # 设置Shell的params
+    def cmdset(self, *args):
         try:
             for _i in range(math.floor(len(args) / 2)):
                 self.params[args[_i]] = args[_i + 1];
@@ -121,7 +131,8 @@ class Shell_BNYYCS(threading.Thread):
             logger.debug(traceback.format_exc());
         return;
     
-    def put(self, *args):
+    # 未设计功能
+    def cmdput(self, *args):
         return;
 
 
@@ -131,19 +142,19 @@ class Shell_BNYYCS(threading.Thread):
         if _cmd == b'quit':
             self.stop(*_args);
         elif _cmd == b'back':
-            self.back(*_args);
+            self.cmdback(*_args);
         elif _cmd == b'next':
-            self.next(*_args);
+            self.cmdnext(*_args);
         elif _cmd == b'help':
-            self.help(*_args);
+            self.cmdhelp(*_args);
         elif _cmd == b'visit':
-            self.visit(*_args);
+            self.cmdvisit(*_args);
         elif _cmd == b'get':
-            self.get(*_args);
+            self.cmdget(*_args);
         elif _cmd == b'set':
-            self.set(*_args);
+            self.cmdset(*_args);
         elif _cmd == b'put':
-            self.put(*_args);
+            self.cmdput(*_args);
         else:
             try:
                 self.res.run(command, self.params);
