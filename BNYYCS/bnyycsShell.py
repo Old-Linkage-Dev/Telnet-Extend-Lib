@@ -28,7 +28,7 @@ __all__ = [
 def splitcmd(cmd):
     if type(cmd) == bytes:
         _cmds = cmd.split();
-        assert _cmds[0] == bytes;
+        assert type(_cmds[0]) == bytes;
         return _cmds[0], _cmds[1:];
     elif type(cmd) in (list, tuple):
         return cmd[0], cmd[1:];
