@@ -110,6 +110,11 @@ class Shell_BNYYCS(threading.Thread):
     
     # 访问当前资源逻辑上的下一条资源
     def cmdnext(self, *args):
+        _res = self.rl.nextres(self.res.res);
+        self.res = self.rl.getres(res = _res, params = self.params);
+        self.history.append(self.res.res);
+        if len(self.history) > self.maxhistory:
+            self.history = self.history[1:];
         return;
 
     # 访问承载帮助信息的资源
