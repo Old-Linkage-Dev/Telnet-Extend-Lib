@@ -253,7 +253,7 @@ class Shell_BNYYCS(threading.Thread):
                 if recv:
                     self.iq.push(recv);
                     for chr in self.iq.pops():
-                        logger.debug('In : <%s>' % chr);
+                        #logger.debug('In : <%s>' % chr);
                         if chr[:1] == TEL_IAC and len(chr) == 1:
                             pass;
                         if chr[:1] == TEL_IAC and len(chr) >= 2 and chr[:2] != TEL_CMD_xFF:
