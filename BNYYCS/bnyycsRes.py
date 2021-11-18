@@ -8,7 +8,7 @@ from .bnyycsCtrl import *;
 
 __all__ = [
     "splitres",
-    "ResLoader"
+    "ResLoader",
     "ResLoader_BNYYCS",
     "Resource",
     "Res_RefusePage",
