@@ -85,6 +85,9 @@ class Shell_BNYYCS(threading.Thread):
     def back(self, *args):
         return;
     
+    def next(self, *args):
+        return;
+
     def help(self, *args):
         return;
     
@@ -113,6 +116,8 @@ class Shell_BNYYCS(threading.Thread):
             self.stop(*_args);
         elif _cmd == b'back':
             self.back(*_args);
+        elif _cmd == b'next':
+            self.next(*_args);
         elif _cmd == b'help':
             self.help(*_args);
         elif _cmd == b'visit':
