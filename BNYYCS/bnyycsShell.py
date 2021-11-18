@@ -82,6 +82,7 @@ class Shell_BNYYCS(threading.Thread):
         self.user = usercontrol();
         self.res = self.rl.getres(frontpage);
         self.params = shellparams;
+        self.history = [self.res.res];
         self.timestamp = time.time();
         self._flagstop = False;
         return;
