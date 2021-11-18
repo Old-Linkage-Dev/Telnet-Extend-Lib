@@ -119,6 +119,15 @@ class Shell_BNYYCS(threading.Thread):
 
     # 访问承载帮助信息的资源
     def cmdhelp(self, *args):
+        _respath = b'help';
+        for arg in args:
+            if type(arg) == bytes:
+                _respath += b'/' + arg;
+        _res = b'res:' + _respath + b':help';
+        self.res = self.rl.getres(res = _res, params = self.params);
+        self.history.append(self.res.res);
+        if len(self.history) > self.maxhistory:
+            self.history = self.history[1:];
         return;
     
     # 访问一条res指向的资源
