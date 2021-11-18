@@ -102,6 +102,10 @@ class Shell_BNYYCS(threading.Thread):
 
     # 访问历史记录的上一条资源
     def cmdback(self, *args):
+        if len(self.history) > 1:
+            self.res = self.rl.getres(self.history[-2]);
+            self.history = self.history[:-1];
+            self.user.cmds = self.res.cmds;
         return;
     
     # 访问当前资源逻辑上的下一条资源
