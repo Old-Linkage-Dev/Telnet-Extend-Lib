@@ -124,7 +124,8 @@ class Shell_BNYYCS(threading.Thread):
     def cmdset(self, *args):
         try:
             for _i in range(math.floor(len(args) / 2)):
-                self.params[args[_i]] = args[_i + 1];
+                if args[_i] in self.params or len(self.params) < self.maxparams:
+                    self.params[args[_i]] = args[_i + 1] if len(args[_i + 1]) <= self.maxvalue else None;
         except Exception as err:
             logger.error(err);
             logger.error('User [%s] set failed.' % self.name);
