@@ -79,6 +79,13 @@ class Shell_BNYYCS(threading.Thread):
         return;
     
     def set(self, *args):
+        try:
+            for _i in range(math.floor(len(args) / 2)):
+                self.params[args[_i]] = args[_i + 1];
+        except Exception as err:
+            logger.error(err);
+            logger.error('User [%s] set failed.' % self.name);
+            logger.debug(traceback.format_exc());
         return;
     
     def put(self, *args):
