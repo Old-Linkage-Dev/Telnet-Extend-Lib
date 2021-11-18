@@ -15,12 +15,24 @@ from .bnyycsLog import logger;
 from .bnyycsCtrl import *;
 
 __all__ = [
+    "splitcmd",
     "Shell_BNYYCS",
     "Shell_Refuse",
     "Shell_Echo",
     "Shell_Interactor",
     "Shell_Caster"
 ];
+
+# splitcmd(cmd:update) : (cmd, args)
+# 用于拆分一个update的cmd，为cmd和args；
+def splitcmd(cmd):
+    if type(cmd) == bytes:
+        _cmds = cmd.split();
+        assert _cmds[0] == bytes;
+        return _cmds[0], _cmds[1:];
+    elif type(cmd) in (list, tuple):
+        return cmd[0], cmd[1:];
+    return;
 
 
 
