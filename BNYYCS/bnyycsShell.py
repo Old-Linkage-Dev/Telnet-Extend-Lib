@@ -42,18 +42,34 @@ def splitcmd(cmd):
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
 #   maxidle     : float                                 // 该用户的最大空闲，超时下线；
+#   resloader   : class(ResLoader)                      // 用于控制资源加载的类；
+#   inputqueue  : class(InputQueue)                     // 用于控制输入处理的类，功能较完备，不建议修改；
+#   usercontrol : class(User)                           // 用于用户控制界面的类，可通过定制实现其他控制功能逻辑；
+#   frontpage   : res                                   // 首页的资源标识符res；
+#   shellparams : dict                                  // Shell提供的初始参数列表；
 
 class Shell_BNYYCS(threading.Thread):
 
-    def __init__(self, conn, name = '', maxidle = 900) -> None:
+    def __init__(
+        self,
+        conn,
+        name        = '',
+        maxidle     = 900,
+        resloader   = Res.ResLoader_BNYYCS,
+        inputqueue  = TelnetInputQueue,
+        usercontrol = User.User_BNYYCS,
+        frontpage   = 'res::front',
+        shellparams = {},
+    ) -> None:
         super().__init__();
         self.conn = conn;
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
-        self.params = {};
-        self.user = User.User_BNYYCS();
-        self.res = Res.Res_SamplePage();
-        self.iq = TelnetInputQueue();
+        self.rl = resloader();
+        self.iq = inputqueue();
+        self.user = usercontrol();
+        self.res = self.rl.getres(frontpage);
+        self.params = shellparams;
         self.timestamp = time.time();
         self._flagstop = False;
         return;
