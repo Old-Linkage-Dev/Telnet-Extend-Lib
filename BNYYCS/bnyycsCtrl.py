@@ -602,3 +602,44 @@ class TelnetInputQueue:
             yield _chr;
             _chr = self.pop();
         return;
+
+class TelnetReqWaitStack:
+    def __init__(self) -> None:
+        self.dowaiting = {};
+        self.wiwaiting = {};
+        return;
+    
+    def waiting(self, cmd):
+        assert type(cmd) == bytes;
+        assert len(cmd) == 3;
+        assert cmd[:2] in TELS_OPFORE;
+        if cmd[:2] in (TEL_CMD_WILL, TEL_CMD_WONT):
+            _in = cmd[2:3] in self.dowaiting;
+            _ret = _in and self.dowaiting[cmd[2:3]] > 0;
+            if _in:
+                self.dowaiting[cmd[2:3]] -= 1;
+            return _ret;
+        elif cmd[:2] in (TEL_CMD_DO, TEL_CMD_DONT):
+            _in = cmd[2:3] in self.wiwaiting;
+            _ret = _in and self.wiwaiting[cmd[2:3]] > 0;
+            if _in:
+                self.dowaiting[cmd[2:3]] -= 1;
+            return _ret;
+    
+    def addwait(self, cmd):
+        assert type(cmd) == bytes;
+        assert len(cmd) == 3;
+        assert cmd[:2] in TELS_OPFORE;
+        if cmd[:2] in (TEL_CMD_WILL, TEL_CMD_WONT):
+            _in = cmd[2:3] in self.wiwaiting;
+            if _in:
+                self.wiwaiting[cmd[2:3]] += 1;
+            else:
+                self.wiwaiting[cmd[2:3]] = 1;
+        elif cmd[:2] in (TEL_CMD_DO, TEL_CMD_DONT):
+            _in = cmd[2:3] in self.dowaiting;
+            if _in:
+                self.dowaiting[cmd[2:3]] += 1;
+            else:
+                self.dowaiting[cmd[2:3]] = 1;
+        return;
