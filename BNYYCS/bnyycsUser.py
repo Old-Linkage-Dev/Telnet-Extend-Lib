@@ -106,19 +106,18 @@ class User_BNYYCS:
             return -1;
 
     def dotab(self):
-        _match = self.cmdmatch(self._cmd)
+        _match = self.cmdmatch(self._cmd);
         if _match == -1:
             pass;
-        elif self.tab == -1:
-            self.tab = 0;
+        elif _match != -1 and _match != self.tab:
+            self.tab = _match;
+        elif _match != -1 and _match == self.tab and self.cmds[_match] != self._cmd:
             if self.tab >= 0 and self.tab < len(self.cmds):
                 self._cmd = self.cmds[self.tab];
-        elif self.tab != -1 and self.cmds[_match] == self._cmd and  _match == self.tab:
+        elif _match != -1 and _match == self.tab and self.cmds[_match] == self._cmd:
             self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
             if self.tab >= 0 and self.tab < len(self.cmds):
                 self._cmd = self.cmds[self.tab];
-        elif self.tab != -1 and self.cmds[_match] == self._cmd and _match != self.tab:
-            self.tab = _match;
         else:
             self._cmd = self.cmds[_match];
         return;
@@ -145,10 +144,15 @@ class User_BNYYCS:
     
     def dohome(self):
         self.tab = 0;
+        if self.tab >= 0 and self.tab < len(self.cmds):
+            self._cmd = self.cmds[self.tab];
         return;
     
     def doend(self):
         self.tab = len(self.cmds) - 1;
+        if self.tab >= 0 and self.tab < len(self.cmds):
+            self._cmd = self.cmds[self.tab];
+        return;
 
     def doesc(self):
         self.tab = -1;
