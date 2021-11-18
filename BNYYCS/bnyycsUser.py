@@ -48,8 +48,8 @@ class User:
     def cmds(self, value):
         assert type(value) == list;
         for elm in value:
-            assert type(elm) == str;
-        self._cmds == value;
+            assert type(elm) == bytes;
+        self._cmds = value;
 
     def draw(self, res, params = {}):
         return b'';
