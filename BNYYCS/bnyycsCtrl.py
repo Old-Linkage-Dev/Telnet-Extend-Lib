@@ -533,7 +533,7 @@ class TelnetInputQueue:
             elif self._input[:2] == TEL_CMD_SB and len(self._input) < 5:
                 return b'';
             elif self._input[:2] == TEL_CMD_SB and len(self._input) >= 5:
-                _sublen = TELS_SUBOPLEN[self._input[:3]];
+                _sublen = TELS_SUBOPLEN[self._input[:3]] if self._input[:3] in TELS_SUBOPLEN else -1;
                 if _sublen == -1:
                     _i = 3;
                     while _i + 1 < len(self._input) and self._input[_i : _i + 2] != TEL_CMD_SE:
