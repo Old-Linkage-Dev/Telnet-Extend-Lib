@@ -13,6 +13,7 @@ __all__ = [
     "Resource",
     "Res_RefusePage",
     "Res_SamplePage",
+    "Res_Page"
 ];
 
 
@@ -32,6 +33,8 @@ def splitres(res : bytes):
     s = res.split(b':');
     assert s[0] == b'res';
     return s[1:];
+
+
 
 
 
@@ -69,6 +72,10 @@ class ResLoader_BNYYCS(ResLoader):
 
 
 
+
+
+
+
 # Resource(res:res, params)
 # 资源的基类，不在本类实现资源的具体形式，只定义公共接口；
 #   res         : res                                   // 实例化资源的res标识符；
@@ -103,6 +110,8 @@ class Resource:
     
     def update(self, recv, params = {}):
         return;
+
+
 
 
 
@@ -152,6 +161,8 @@ class Res_RefusePage(Resource):
 
     def run(self, cmd, *args, params = {}):
         return;
+
+
 
 
 
@@ -210,5 +221,22 @@ class Res_SamplePage(Resource):
         return;
 
 
+
+
+
+class Res_Page(Resource):
+
+    def __init__(self, res) -> None:
+        self.res = res;
+        return;
+    
+    def draw(self, tab, params = {}):
+        return;
+    
+    def update(self, inps = [], params = {}):
+        return;
+
+    def run(self, cmd, *args, params = {}):
+        return;
 
 
