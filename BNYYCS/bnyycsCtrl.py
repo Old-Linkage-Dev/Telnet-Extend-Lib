@@ -503,8 +503,35 @@ TELS_SUBOPLEN       = {
 
 
 
+
+
+
+
+# InputQueue的基类
+class InputQueue:
+    def __init__(self) -> None:
+        self._input = b'';
+        return;
+    
+    def push(self, inp):
+        self._input += inp;
+        return;
+    
+    def pop(self):
+        _ret = self._input[:1] if len(self._input) >= 1 else b'';
+        return b'';
+    
+    def pops(self):
+        _chr = self.pop();
+        while _chr:
+            yield _chr;
+            _chr = self.pop();
+        return;
+
+
+
 # 用于Telnet接到的数据的重整的类
-class TelnetInputQueue:
+class TelnetInputQueue(InputQueue):
     def __init__(self) -> None:
         self._input = b'';
         return;
@@ -595,13 +622,8 @@ class TelnetInputQueue:
             return self.popreturn();
         else:
             return self.popchar();
-    
-    def pops(self):
-        _chr = self.pop();
-        while _chr:
-            yield _chr;
-            _chr = self.pop();
-        return;
+
+
 
 class TelnetReqWaitStack:
     def __init__(self) -> None:
