@@ -62,10 +62,45 @@ class Shell_BNYYCS(threading.Thread):
         self._flagstop = True;
         return;
     
+    def quit(self, *args):
+        self.stop();
+        return;
+
+    def back(self, *args):
+        return;
+    
+    def help(self, *args):
+        return;
+    
+    def visit(self, *args):
+        return;
+    
+    def get(self, *args):
+        return;
+    
+    def set(self, *args):
+        return;
+    
+    def put(self, *args):
+        return;
+
     def cmd(self, command):
-        if command == b'quit':
-            self.stop();
-        elif command:
+        _cmd, _args = splitcmd(command);
+        if _cmd == b'quit':
+            self.stop(*_args);
+        elif _cmd == b'back':
+            self.back(*_args);
+        elif _cmd == b'help':
+            self.help(*_args);
+        elif _cmd == b'visit':
+            self.visit(*_args);
+        elif _cmd == b'get':
+            self.get(*_args);
+        elif _cmd == b'set':
+            self.set(*_args);
+        elif _cmd == b'put':
+            self.put(*_args);
+        else:
             self.res.run(command, self.params);
             self.user.cmds = self.res.cmds;
         return;
