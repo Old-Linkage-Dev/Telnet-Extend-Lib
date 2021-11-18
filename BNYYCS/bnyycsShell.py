@@ -90,6 +90,13 @@ class Shell_BNYYCS(threading.Thread):
         try:
             self.draw();
             recv = CHR_NUL;
+            self.conn.send(
+                TELf_WILL(TEL_OP_ECHO) +
+                TELf_DONT(TEL_OP_ECHO) +
+                TELf_WILL(TEL_OP_SPRGA) +
+                TELf_DO(TEL_OP_NAWS) +
+                TELf_DONT(TEL_OP_LNMOD)
+            );
             while time.time() - self.timestamp <= self.maxidle and recv != b'' and not self._flagstop:
                 try:
                     recv = self.conn.recv(4096);
@@ -97,24 +104,22 @@ class Shell_BNYYCS(threading.Thread):
                     recv = None;
                 if recv:
                     self.iq.push(recv);
-                    chrs = [];
                     for chr in self.iq.pops():
-                        if chr[:1] == TEL_IAC:
-                            # 需要添加对 TELNET CMD 的处置
-                            if len(chr) <= 1:
-                                pass;
-                            elif chr[:2] in TELS_OPFORE:
-                                pass;
-                            elif chr[:2] == TEL_CMD_SB:
-                                pass;
-                            else:
-                                pass;
+                        logger.debug('In : <%s>' % chr);
+                        if chr[:1] == TEL_IAC and len(chr) == 1:
                             pass;
+                        if chr[:1] == TEL_IAC and len(chr) >= 2 and chr[:2] != TEL_CMD_xFF:
+                            # 由于目前请求都是由服务器发出的，这里我们放弃考虑客户端的请求情况
+                            # 这可以避免对请求情况记录的复杂实现，若不进行复杂实现则可能触发回复的风暴
+                            pass;
+                        elif chr[:1] == TEL_IAC and len(chr) >= 2 and chr[:2] == TEL_CMD_xFF:
+                            # 对于此处是否应该对两者进行同步更新是需要继续讨论的；
+                            self.updateuser([TEL_xFF]);
+                            self.updateres([TEL_xFF]);
                         else:
-                            chrs.append(chr);
-                    # 对于此处是否应该对两者进行同步更新是需要继续讨论的；
-                    self.updateuser(chrs);
-                    self.updateres(chrs);
+                            # 对于此处是否应该对两者进行同步更新是需要继续讨论的；
+                            self.updateuser([chr]);
+                            self.updateres([chr]);
                     self.draw();
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
