@@ -37,12 +37,17 @@ def splitcmd(cmd):
 
 
 
+
+
 # Shell_BNYYCS(conn, [name], [maxidle])
 # 单个用户的标准BNYYCS型shell控制线程，使用User类的update进行交互，
 # 接受用户操作后将User类的page和line返回，User类不能主动更新；
 #   conn        : socket                                // 该用户的socket连接；
 #   name        : str                                   // 该用户的线程名称；
 #   maxidle     : float                                 // 该用户的最大空闲，超时下线；
+#   maxhistory  : int                                   // 该用户的最大历史深度；
+#   maxparams   : int                                   // 该用户的最大参数规模；
+#   maxvalue    : int                                   // 该用户的最大单个参数规模；
 #   resloader   : class(ResLoader)                      // 用于控制资源加载的类；
 #   inputqueue  : class(InputQueue)                     // 用于控制输入处理的类，功能较完备，不建议修改；
 #   usercontrol : class(User)                           // 用于用户控制界面的类，可通过定制实现其他控制功能逻辑；
@@ -56,6 +61,9 @@ class Shell_BNYYCS(threading.Thread):
         conn,
         name        = '',
         maxidle     = 900,
+        maxhistory  = 8,
+        maxparams   = 64,
+        maxvalue    = 256,
         resloader   = Res.ResLoader_BNYYCS,
         inputqueue  = TelnetInputQueue,
         usercontrol = User.User_BNYYCS,
@@ -66,6 +74,9 @@ class Shell_BNYYCS(threading.Thread):
         self.conn = conn;
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
+        self.maxhistory = maxhistory;
+        self.maxparams = maxparams;
+        self.maxvalue = maxvalue;
         self.rl = resloader();
         self.iq = inputqueue();
         self.user = usercontrol();
