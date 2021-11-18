@@ -12,6 +12,7 @@ from . import bnyycsUser as User;
 from . import bnyycsRes as Res;
 
 from .bnyycsLog import logger;
+from .bnyycsRes import splitres;
 from .bnyycsCtrl import *;
 
 __all__ = [
