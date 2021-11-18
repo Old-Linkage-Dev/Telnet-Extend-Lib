@@ -79,9 +79,9 @@ class Shell_BNYYCS(threading.Thread):
         self.maxvalue = maxvalue;
         self.rl = resloader();
         self.iq = inputqueue();
-        self.user = usercontrol();
-        self.res = self.rl.getres(frontpage);
         self.params = shellparams;
+        self.user = usercontrol(params = self.params);
+        self.res = self.rl.getres(res = frontpage, params = self.params);
         self.history = [self.res.res];
         self.timestamp = time.time();
         self._flagstop = False;
@@ -91,7 +91,8 @@ class Shell_BNYYCS(threading.Thread):
         self._flagstop = True;
         return;
     
-    def quit(self, *args):
+
+
         self.stop();
         return;
 
@@ -122,6 +123,8 @@ class Shell_BNYYCS(threading.Thread):
     
     def put(self, *args):
         return;
+
+
 
     def cmd(self, command):
         _cmd, _args = splitcmd(command);
@@ -236,6 +239,8 @@ class Shell_BNYYCS(threading.Thread):
             logger.debug(traceback.format_exc());
         logger.info('User [%s] ended.' % self.name);
         return;
+
+
 
 
 

@@ -13,8 +13,9 @@ __all__ = [
 
 
 
-# User()
+# User(params)
 # 用户控制的基类，不在本类实现用户控制的具体形式，只定义公共接口；
+# params是Shell当前的环境参数；
 # .tab          : int                                   // 该用户的焦点tab顺序，只读；
 # .cmds         : [bytes]                               // 该用户的待选指令，可写，由Shell传入，
 #                                                       // 为字符串类型的数组，每个元素为一条指令；
@@ -29,11 +30,11 @@ __all__ = [
 #               : bytes                                 // 返回update表示交由Shell执行一条指令；
 class User:
 
-    def __init__(self) -> None:
+    def __init__(self, params = {}) -> None:
         self._tab = -1;
         self._cmd = '';
         self._cmds = [];
-        self._params = {};
+        self._params = params;
         return;
     
     @property
@@ -63,8 +64,8 @@ class User:
 
 
 
-# User_BNYYCS()
-# 用户控制的BNYYCS类，实现一个具有基本交互功能的类；
+# User_BNYYCS(params)
+# 用户控制的BNYYCS类，实现一个具有基本交互功能的类，params是Shell当前的环境参数；
 # .tab          : int                                   // 该用户的焦点tab顺序，只读，
 #                                                       // 与cmds列表对应，指定-1表示无焦点；
 # .cmds         : [bytes]                               // 该用户的待选指令，可写，由Shell传入，
@@ -77,10 +78,11 @@ class User:
 #               : bytes                                 // 返回update表示交由Shell执行一条指令；
 class User_BNYYCS(User):
 
-    def __init__(self) -> None:
+    def __init__(self, params = {}) -> None:
         self._tab = -1;
         self._cmds = [];
         self._cmd = b'';
+        self._params = params;
         return;
     
     def draw(self, res, params = {}):

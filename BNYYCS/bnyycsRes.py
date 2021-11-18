@@ -44,8 +44,8 @@ class ResLoader:
     def __init__(self) -> None:
         return;
     
-    def getres(self, res):
-        return Resource();
+    def getres(self, res, params = {}):
+        return Resource(res = res, params = params);
 
 
 
@@ -58,8 +58,8 @@ class ResLoader_BNYYCS(ResLoader):
     def __init__(self) -> None:
         return;
     
-    def getres(self, res):
-        return Res_SamplePage();
+    def getres(self, res, params = {}):
+        return Res_SamplePage(res = res, params = params);
 
 
 
