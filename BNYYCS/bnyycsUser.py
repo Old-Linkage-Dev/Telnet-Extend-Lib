@@ -75,11 +75,11 @@ class User:
 #               : bytes                                 // 在画面下方提供一个单行输入位置；
 # .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : bytes                                 // 返回update表示交由Shell执行一条指令；
-class User_BNYYCS:
+class User_BNYYCS(User):
 
     def __init__(self) -> None:
-        self.tab = -1;
-        self.cmds = [];
+        self._tab = -1;
+        self._cmds = [];
         self._cmd = b'';
         return;
     
@@ -98,7 +98,7 @@ class User_BNYYCS:
     
     def cmdmatch(self, cmd):
         if cmd == b'':
-            return self.tab;
+            return self._tab;
         else:
             for _match in range(len(self.cmds)):
                 if cmd == self.cmds[_match][:len(cmd)]:
@@ -109,29 +109,29 @@ class User_BNYYCS:
         _match = self.cmdmatch(self._cmd);
         if _match == -1:
             pass;
-        elif _match != -1 and _match != self.tab:
-            self.tab = _match;
-        elif _match != -1 and _match == self.tab and self.cmds[_match] != self._cmd:
-            if self.tab >= 0 and self.tab < len(self.cmds):
-                self._cmd = self.cmds[self.tab];
-        elif _match != -1 and _match == self.tab and self.cmds[_match] == self._cmd:
-            self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
-            if self.tab >= 0 and self.tab < len(self.cmds):
-                self._cmd = self.cmds[self.tab];
+        elif _match != -1 and _match != self._tab:
+            self._tab = _match;
+        elif _match != -1 and _match == self._tab and self.cmds[_match] != self._cmd:
+            if self._tab >= 0 and self._tab < len(self.cmds):
+                self._cmd = self.cmds[self._tab];
+        elif _match != -1 and _match == self._tab and self.cmds[_match] == self._cmd:
+            self._tab = (self._tab + 2) % (len(self.cmds) + 1) - 1;
+            if self._tab >= 0 and self._tab < len(self.cmds):
+                self._cmd = self.cmds[self._tab];
         else:
             self._cmd = self.cmds[_match];
         return;
     
     def doup(self):
-        self.tab = (self.tab) % (len(self.cmds) + 1) - 1;
-        if self.tab >= 0 and self.tab < len(self.cmds):
-            self._cmd = self.cmds[self.tab];
+        self._tab = (self._tab) % (len(self.cmds) + 1) - 1;
+        if self._tab >= 0 and self._tab < len(self.cmds):
+            self._cmd = self.cmds[self._tab];
         return;
     
     def dodown(self):
-        self.tab = (self.tab + 2) % (len(self.cmds) + 1) - 1;
-        if self.tab >= 0 and self.tab < len(self.cmds):
-            self._cmd = self.cmds[self.tab];
+        self._tab = (self._tab + 2) % (len(self.cmds) + 1) - 1;
+        if self._tab >= 0 and self._tab < len(self.cmds):
+            self._cmd = self.cmds[self._tab];
         return;
     
     def doright(self):
@@ -143,19 +143,19 @@ class User_BNYYCS:
         return;
     
     def dohome(self):
-        self.tab = 0;
-        if self.tab >= 0 and self.tab < len(self.cmds):
-            self._cmd = self.cmds[self.tab];
+        self._tab = 0;
+        if self._tab >= 0 and self._tab < len(self.cmds):
+            self._cmd = self.cmds[self._tab];
         return;
     
     def doend(self):
-        self.tab = len(self.cmds) - 1;
-        if self.tab >= 0 and self.tab < len(self.cmds):
-            self._cmd = self.cmds[self.tab];
+        self._tab = len(self.cmds) - 1;
+        if self._tab >= 0 and self._tab < len(self.cmds):
+            self._cmd = self.cmds[self._tab];
         return;
 
     def doesc(self):
-        self.tab = -1;
+        self._tab = -1;
         return;
     
     def dodel(self):
