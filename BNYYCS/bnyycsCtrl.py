@@ -492,13 +492,13 @@ def TELf_SB(cmd, *args):
 
 TELS_OPFORE         = (TEL_CMD_WILL, TEL_CMD_WONT, TEL_CMD_DO, TEL_CMD_DONT);
 TELS_SUBOPLEN       = {
-    TEL_IAC + TEL_SB + TEL_OP_NAWS : 3 + 4 + 2,
-    TEL_IAC + TEL_SB + TEL_OP_STA : -1,
-    TEL_IAC + TEL_SB + TEL_OP_TTYP : -1,
-    TEL_IAC + TEL_SB + TEL_OP_TSPD : -1,
-    TEL_IAC + TEL_SB + TEL_OP_TOGFC : -1,
-    TEL_IAC + TEL_SB + TEL_OP_LNMOD : -1,
-    TEL_IAC + TEL_SB + TEL_OP_ENVIRON : -1,
+    TEL_IAC + TEL_SB + TEL_OP_NAWS      : 3 + 4 + 2,
+    TEL_IAC + TEL_SB + TEL_OP_STA       : -1,
+    TEL_IAC + TEL_SB + TEL_OP_TTYP      : -1,
+    TEL_IAC + TEL_SB + TEL_OP_TSPD      : -1,
+    TEL_IAC + TEL_SB + TEL_OP_TOGFC     : -1,
+    TEL_IAC + TEL_SB + TEL_OP_LNMOD     : -1,
+    TEL_IAC + TEL_SB + TEL_OP_ENVIRON   : -1,
 };
 
 
