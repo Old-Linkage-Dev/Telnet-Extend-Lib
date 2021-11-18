@@ -48,6 +48,7 @@ class Shell_BNYYCS(threading.Thread):
     
     def stop(self) -> None:
         self._flagstop = True;
+        return;
     
     def cmd(self, command):
         if command == b'quit':
@@ -55,6 +56,7 @@ class Shell_BNYYCS(threading.Thread):
         elif command:
             self.res.run(command, self.params);
             self.user.cmds = self.res.cmds;
+        return;
 
     def updateres(self, inps):
         update = self.res.update(inps = inps, params = self.params);
@@ -62,6 +64,7 @@ class Shell_BNYYCS(threading.Thread):
             logger.info('User [%s] res updated "%s"' % (self.name, update));
             self.cmd(update);
         self.user.cmds = self.res.cmds;
+        return;
     
     def updateuser(self, inps):
         self.user.cmds = self.res.cmds;
@@ -70,6 +73,7 @@ class Shell_BNYYCS(threading.Thread):
             self.timestamp = time.time();
             logger.info('User [%s] updated "%s"' % (self.name, update));
             self.cmd(update);
+        return;
     
     def draw(self):
         _draw = (
