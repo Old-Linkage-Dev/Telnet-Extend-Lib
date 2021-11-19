@@ -155,7 +155,6 @@ class Res_RefusePage(Resource):
         _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 0 else CHR_T_FC_BLUE + b'[ BACK ]' + CHR_T_RST;
         _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 1 else CHR_T_FC_BLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
-            CHR_T_FC_YELLO +
             b'#==============================================================================#' + CHR_CRLF +
             b'| CONNECTION INFORMATION                                                       |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
@@ -213,7 +212,6 @@ class Res_SamplePage(Resource):
         _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_BLUE + b'[ BACK ]' + CHR_T_RST;
         _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_BLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
-            CHR_T_FC_LBLUE +
             b'#==============================================================================#' + CHR_CRLF +
             b'| A SAMPLE PAGE                                                                |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
