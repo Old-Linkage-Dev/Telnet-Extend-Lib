@@ -130,7 +130,7 @@ class Resource:
         self._params.update(params);
         return;
     
-    def update(self, recv, **params):
+    def update(self, inps = [], **params):
         self._params.update(params);
         return;
 
