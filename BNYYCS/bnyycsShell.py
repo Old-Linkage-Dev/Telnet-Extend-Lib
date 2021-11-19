@@ -138,7 +138,7 @@ class Shell_BNYYCS(threading.Thread):
     # 访问一条res指向的资源
     def cmdvisit(self, *args):
         if len(args) >= 1 and type(args[0]) == bytes:
-            _res = args[0];
+            _res = args[0] if len(args[0]) >= 4 and args[0][:4] == b'res:' else b'res:' + args[0];
             self.res = self.rl.getres(res = _res, **self.params);
             self.user.cmds = self.res.cmds;
             self.user.tab = -1;
@@ -183,6 +183,8 @@ class Shell_BNYYCS(threading.Thread):
         elif _cmd == b'help':
             self.cmdhelp(*_args);
         elif _cmd == b'visit':
+            self.cmdvisit(*_args);
+        elif _cmd == b'res':
             self.cmdvisit(*_args);
         elif _cmd == b'get':
             self.cmdget(*_args);
