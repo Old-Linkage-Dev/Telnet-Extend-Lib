@@ -133,15 +133,11 @@ class Shell_BNYYCS(threading.Thread):
     # 访问一条res指向的资源
     def cmdvisit(self, *args):
         if len(args) >= 1 and type(args[0]) == bytes:
-            _s = splitres(args[0]);
-            if len(_s) >= 3 and _s[0] == b'res':
-                _res = args[0];
-                self.res = self.rl.getres(res = _res, **self.params);
-                self.history.append(self.res.res);
-            elif len(_s) >= 2:
-                _res = b'res:' + args[0];
-                self.res = self.rl.getres(res = _res, **self.params);
-                self.history.append(self.res.res);
+            _res = args[0];
+            self.res = self.rl.getres(res = _res, **self.params);
+            self.user.cmds = self.res.cmds;
+            self.user.tab = -1;
+            self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];
         return;
