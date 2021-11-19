@@ -153,6 +153,8 @@ CHR_CSI_CUB         = CHR_CSI_START + b'D';
 CHR_CSI_CUP         = CHR_CSI_START + b'H';
 CHR_CSI_HVP         = CHR_CSI_START + b'f';
 CHR_CSI_SGR         = CHR_CSI_START + b'm';
+CHR_CSI_SCP         = CHR_CSI_START + b's';
+CHR_CSI_RCP         = CHR_CSI_START + b'u';
 
 def CHRf_CSI_CUU(n):
     assert 0 < n < 32768;
