@@ -8,7 +8,8 @@ from .bnyycsCtrl import *;
 
 __all__ = [
     "User",
-    "User_BNYYCS"
+    "User_BNYYCS",
+    "User_BNYYCS_Light"
 ];
 
 
