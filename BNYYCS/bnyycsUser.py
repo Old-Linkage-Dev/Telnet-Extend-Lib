@@ -205,3 +205,55 @@ class User_BNYYCS(User):
                 self._cmd = b'';
                 return _ret;
         return None;
+
+
+
+# User_BNYYCS_Light(**params)
+# 用户控制的BNYYCS_Light类，实现一个具有基本交互功能的类，只有对用户上下键切换焦点逻辑的响应
+# params是Shell当前的环境参数；
+# .tab          : int                                   // 该用户的焦点tab顺序，只读，
+#                                                       // 与cmds列表对应，指定-1表示无焦点；
+# .cmds         : [bytes]                               // 该用户的待选指令，可写，由Shell传入，
+#                                                       // 为字符串类型的数组，每个元素为一条指令，
+#                                                       // 在用户使用↑↓键时根据当前tab顺序辅助输入对应cmds，
+#                                                       // 在用户使用Tab键时根据当前已输入指令执行辅助输入补全，或cmds下一，或不操作；
+# .draw(res, **params)                                  // 该用户的一次绘制，res为绘制时的统一资源标识符，params是Shell当前的环境参数，
+#               : bytes                                 // 在画面下方提供一个单行输入位置；
+# .update(inps:[bytes], **params)                       // 向资源发送一次接受，params是Shell当前的环境参数，
+#               : bytes                                 // 返回update表示交由Shell执行一条指令；
+class User_BNYYCS_Light(User):
+
+    def __init__(self, **params) -> None:
+        self._tab = -1;
+        self._cmds = [];
+        return;
+    
+    def draw(self, res, **params):
+        return b'';
+    
+    def doup(self):
+        self._tab = (self._tab) % (len(self.cmds) + 1) - 1;
+        return;
+    
+    def dodown(self):
+        self._tab = (self._tab + 2) % (len(self.cmds) + 1) - 1;
+        return;
+    
+    def doesc(self):
+        self._tab = -1;
+        return;
+    
+    def update(self, inps = [], **params):
+        for inp in inps:
+            if inp == CHR_KEY_UP:
+                self.doup();
+            elif inp == CHR_KEY_DOWN:
+                self.dodown();
+            elif inp == CHR_KEY_ESC:
+                self.doesc();
+            elif inp in CHRS_RETURN:
+                if self._tab >= 0 and self._tab < len(self._cmds):
+                    return self._cmds[self._tab];
+                else:
+                    self._tab = -1;
+        return None;
