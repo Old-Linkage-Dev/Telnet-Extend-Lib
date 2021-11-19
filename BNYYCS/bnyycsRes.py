@@ -163,9 +163,9 @@ class Res_RefusePage(Resource):
         _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 1 else CHR_T_FC_BLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
             b'#==============================================================================#' + CHR_CRLF +
-            b'| CONNECTION INFORMATION                                                       |' + CHR_CRLF +
+            b'| VISITING INFORMATION                                                         |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
-            b'| The atempt to visit this site is refused,                                    |' + CHR_CRLF +
+            b'| The atempt to visit this page is refused,                                    |' + CHR_CRLF +
             b'| The reason to the rufusing is:                                               |' + CHR_CRLF +
             b'|   '                   + _lspace + _reason + _rspace +                   b'   |' + CHR_CRLF +
             b'|                                                                              |' + CHR_CRLF +
