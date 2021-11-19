@@ -57,6 +57,7 @@ class User:
         for elm in value:
             assert type(elm) == bytes;
         self._cmds = value;
+        return;
 
     def draw(self, res, **params):
         self._params.update(params);
