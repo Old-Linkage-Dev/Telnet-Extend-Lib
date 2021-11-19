@@ -67,8 +67,8 @@ class ResLoader_BNYYCS(ResLoader):
     def getres(self, res, params = {}):
         return Res_SamplePage(res = res, params = params);
     
-    def getnext(self, res, params = {}):
-        return Res_SamplePage(res = res, params = params);
+    def nextres(self, res):
+        return b'res::blank';
 
 
 
