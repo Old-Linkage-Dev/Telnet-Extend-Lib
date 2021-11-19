@@ -67,7 +67,7 @@ class Shell_BNYYCS(threading.Thread):
         resloader   = Res.ResLoader_BNYYCS,
         inputqueue  = TelnetInputQueue,
         usercontrol = User.User_BNYYCS,
-        frontpage   = 'res::front',
+        frontpage   = b'res::front',
         shellparams = {},
     ) -> None:
         super().__init__();
