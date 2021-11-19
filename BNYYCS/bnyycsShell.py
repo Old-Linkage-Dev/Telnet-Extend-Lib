@@ -104,14 +104,17 @@ class Shell_BNYYCS(threading.Thread):
     def cmdback(self, *args):
         if len(self.history) > 1:
             self.res = self.rl.getres(self.history[-2]);
-            self.history = self.history[:-1];
             self.user.cmds = self.res.cmds;
+            self.user.tab = -1;
+            self.history = self.history[:-1];
         return;
     
     # 访问当前资源逻辑上的下一条资源
     def cmdnext(self, *args):
         _res = self.rl.nextres(self.res.res);
         self.res = self.rl.getres(res = _res, **self.params);
+        self.user.cmds = self.res.cmds;
+        self.user.tab = -1;
         self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];
@@ -125,6 +128,8 @@ class Shell_BNYYCS(threading.Thread):
                 _respath += b'/' + arg;
         _res = b'res:' + _respath + b':help';
         self.res = self.rl.getres(res = _res, **self.params);
+        self.user.cmds = self.res.cmds;
+        self.user.tab = -1;
         self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];

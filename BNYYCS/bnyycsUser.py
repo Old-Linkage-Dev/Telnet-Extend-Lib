@@ -40,6 +40,12 @@ class User:
     @property
     def tab(self):
         return self._tab;
+    
+    @tab.setter
+    def tab(self, val):
+        assert val == -1;
+        self._tab = -1;
+        return;
 
     @property
     def cmds(self):
