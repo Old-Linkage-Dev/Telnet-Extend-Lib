@@ -124,7 +124,7 @@ class Resource:
     
     def draw(self, tab, **params):
         self._params.update(params);
-        return;
+        return b'';
     
     def run(self, cmd, *args, **params):
         self._params.update(params);
