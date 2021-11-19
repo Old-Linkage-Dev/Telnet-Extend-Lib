@@ -145,7 +145,7 @@ class Res_RefusePage(Resource):
         self.cmds = [b'back', b'quit'];
         self._params = params;
         _s = splitres(res);
-        self.reason = _s[3] if len(_s) >= 3 else b'';
+        self.reason = _s[2] if len(_s) >= 3 else b'';
     
     def draw(self, tab, **params):
         self._params.update(params);
@@ -176,8 +176,8 @@ class Res_RefusePage(Resource):
             b'|                                                                              |' + CHR_CRLF +
             b'|                                                SUPPORTED BY PROTOTYPE BNYYCS |' + CHR_CRLF +
             b'#==============================================================================#' + CHR_CRLF +
-            CHRf_CSI_CUMOV(-7, 35) + _elem_back, CHR_CRLF +
-            CHRf_CSI_CUMOV(1, 35) + _elem_quit, CHR_CRLF
+            CHRf_CSI_CUMOV(-7, 35) + _elem_back + CHR_CRLF +
+            CHRf_CSI_CUMOV(1, 35) + _elem_quit + CHR_CRLF
         );
         return _ret
     
