@@ -67,8 +67,8 @@ class ResLoader_BNYYCS(ResLoader):
     def __init__(self) -> None:
         return;
     
-    def getres(self, res, params = {}):
-        return Res_SamplePage(res = res, params = params);
+    def getres(self, res, **params):
+        return Res_SamplePage(res = res, **params);
     
     def fileres(self, res):
         return '';
