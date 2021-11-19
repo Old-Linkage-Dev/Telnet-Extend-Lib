@@ -122,7 +122,7 @@ class Shell_BNYYCS(threading.Thread):
 
     # 访问承载帮助信息的资源
     def cmdhelp(self, *args):
-        _respath = b'help';
+        _respath = b'support/help';
         for arg in args:
             if type(arg) == bytes:
                 _respath += b'/' + arg;
