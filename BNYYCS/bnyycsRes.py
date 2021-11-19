@@ -270,16 +270,12 @@ class Res_TXTPage(Resource):
         self._ln = 0;
         _s = splitres(res);
         _filepath = _s[0].decode(CHRSET_SYS) + '.txt';
-        try:
-            with open(_filepath, 'r') as fp:
-                for line in fp.readlines():
-                    if line[0] != '\f':
-                        self._txt.append(line[:-1]);
-                    else:
-                        self._txt.append('\r\n');
-        except OSError as err:
-            logger.error(err);
-            logger.error('Res TXTPage unable to load file %s.' % _filepath);
+        with open(_filepath, 'r') as fp:
+            for line in fp.readlines():
+                if line[0] != '\f':
+                    self._txt.append(line[:-1]);
+                else:
+                    self._txt.append('\r\n');
         return;
     
     def draw(self, tab, **params):
