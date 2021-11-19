@@ -138,8 +138,8 @@ class Res_RefusePage(Resource):
         _reason = (self.reason if len(self.reason) <= 72 else self.reason[:69] + b'...') if self.reason else b'NO REASON PRESENTED';
         _lspace = b'%*s' % (math.ceil((72 - len(_reason)) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(_reason)) / 2), b'');
-        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;
-        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_LBLUE + b'[ QUIT ]' + CHR_T_RST;
+        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 0 else CHR_T_FC_BLUE + b'[ BACK ]' + CHR_T_RST;
+        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 1 else CHR_T_FC_BLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
             CHR_T_FC_YELLO +
             b'#==============================================================================#' + CHR_CRLF +
@@ -194,10 +194,10 @@ class Res_SamplePage(Resource):
         _lspace = b'%*s' % (math.ceil((72 - len(_lastcmd)) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(_lastcmd)) / 2), b'');
         _elem_lastcmd = CHR_T_FC_LBLUE + _lspace + _lastcmd + _rspace + CHR_T_RST;
-        _elem_test = CHR_T_RST + CHR_T_BC_WHITE + b'[ TEST ]' + CHR_T_RST if tab == 0 else CHR_T_FC_LBLUE + b'[ TEST ]' + CHR_T_RST;
-        _elem_help = CHR_T_RST + CHR_T_BC_WHITE + b'[ HELP ]' + CHR_T_RST if tab == 1 else CHR_T_FC_LBLUE + b'[ HELP ]' + CHR_T_RST;
-        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_LBLUE + b'[ BACK ]' + CHR_T_RST;
-        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_LBLUE + b'[ QUIT ]' + CHR_T_RST;
+        _elem_test = CHR_T_RST + CHR_T_BC_WHITE + b'[ TEST ]' + CHR_T_RST if tab == 0 else CHR_T_FC_BLUE + b'[ TEST ]' + CHR_T_RST;
+        _elem_help = CHR_T_RST + CHR_T_BC_WHITE + b'[ HELP ]' + CHR_T_RST if tab == 1 else CHR_T_FC_BLUE + b'[ HELP ]' + CHR_T_RST;
+        _elem_back = CHR_T_RST + CHR_T_BC_WHITE + b'[ BACK ]' + CHR_T_RST if tab == 2 else CHR_T_FC_BLUE + b'[ BACK ]' + CHR_T_RST;
+        _elem_quit = CHR_T_RST + CHR_T_BC_WHITE + b'[ QUIT ]' + CHR_T_RST if tab == 3 else CHR_T_FC_BLUE + b'[ QUIT ]' + CHR_T_RST;
         _ret = (
             CHR_T_FC_LBLUE +
             b'#==============================================================================#' + CHR_CRLF +
