@@ -13,7 +13,7 @@ __all__ = [
     "Resource",
     "Res_RefusePage",
     "Res_SamplePage",
-    "Res_Page"
+    "Res_TXTPage"
 ];
 
 
@@ -241,19 +241,78 @@ class Res_SamplePage(Resource):
 
 
 
-class Res_Page(Resource):
+class Res_TXTPage(Resource):
 
-    def __init__(self, res) -> None:
+    def __init__(self, res, **params) -> None:
         self.res = res;
+        self.cmds = [b'help', b'back', b'quit'];
+        self._params = params;
+        self._txt = [];
+        self._ln = 0;
+        _s = splitres(res);
+        _filepath = _s[0].decode(CHRSET_SYS) + '.txt';
+        try:
+            with open(_filepath, 'r') as fp:
+                for line in fp.readlines():
+                    if line[0] != '\f':
+                        self._txt.append(line[:-1]);
+                    else:
+                        self._txt.append('\r\n');
+        except OSError as err:
+            logger.error(err);
+            logger.error('Res TXTPage unable to load file %s.' % _filepath);
         return;
     
-    def draw(self, tab, params = {}):
-        return;
+    def draw(self, tab, **params):
+        self._params.update(params);
+        if tab == 0:
+            _ret = (
+                CHR_CSI_SCP +
+                CHRf_CSI_CUMOV(8, 34) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                b'|[ help ]|' + CHRf_CSI_CUMOV(1, -10) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                CHR_CSI_RCP
+            );
+        elif tab == 1:
+            _ret = (
+                CHR_CSI_SCP +
+                CHRf_CSI_CUMOV(8, 34) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                b'|[ back ]|' + CHRf_CSI_CUMOV(1, -10) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                CHR_CSI_RCP
+            );
+        elif tab == 2:
+            _ret = (
+                CHR_CSI_SCP +
+                CHRf_CSI_CUMOV(8, 34) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                b'|[ quit ]|' + CHRf_CSI_CUMOV(1, -10) +
+                b'#--------#' + CHRf_CSI_CUMOV(1, -10) +
+                CHR_CSI_RCP
+            );
+        else:
+            _ret = b'';
+            for _l in self._txt[self._ln : self._ln + 20]:
+                _ret += _l.encode(CHRSET_EXT) + b'\r\n';
+        return _ret;
     
-    def update(self, inps = [], params = {}):
+    def update(self, inps = [], **params):
+        self._params.update(params);
+        for inp in inps:
+            if inp == CHR_KEY_PGDN:
+                self._ln += 1;
+            elif inp == CHR_KEY_PGUP:
+                self._ln -= 1;
+            if self._ln < 0:
+                self._ln = 0;
+            elif self._ln > len(self._txt) - 10:
+                self._ln = len(self._txt) - 10;
         return;
 
-    def run(self, cmd, *args, params = {}):
+    def run(self, cmd, *args, **params):
+        self._params.update(params);
         return;
 
 
