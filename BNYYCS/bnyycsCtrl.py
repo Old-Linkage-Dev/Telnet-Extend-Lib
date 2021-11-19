@@ -95,16 +95,6 @@ CHRS_EXT = (
 
 
 
-# 一般控制字符
-CHR_RIS             = CHR_ESC + b'c';
-CHR_CRLF            = CHR_CR + CHR_LF;
-CHR_CRNUL           = CHR_CR + CHR_NUL;
-CHR_CLR             = CHR_RIS;
-CHRS_ESC_END        = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
-CHRS_RETURN         = (CHR_CRLF, CHR_CRNUL, CHR_CR, CHR_LF);
-
-
-
 # 输入控制字符
 CHR_KEY_UP          = b'\x1b[A';
 CHR_KEY_DOWN        = b'\x1b[B';
@@ -151,6 +141,9 @@ CHR_CSI_CUD         = CHR_CSI_START + b'B';
 CHR_CSI_CUF         = CHR_CSI_START + b'C';
 CHR_CSI_CUB         = CHR_CSI_START + b'D';
 CHR_CSI_CUP         = CHR_CSI_START + b'H';
+CHR_CSI_ED0         = CHR_CSI_START + b'0J';
+CHR_CSI_ED1         = CHR_CSI_START + b'1J';
+CHR_CSI_ED2         = CHR_CSI_START + b'2J';
 CHR_CSI_HVP         = CHR_CSI_START + b'f';
 CHR_CSI_SGR         = CHR_CSI_START + b'm';
 CHR_CSI_SCP         = CHR_CSI_START + b's';
@@ -197,6 +190,16 @@ def CHRf_CSI_HVP(y, x):
 
 def CHRf_CSI_SGR(*args):
     return CHR_CSI_START + b';'.join([bytes(str(arg), CHRSET_SYS) for arg in args]) + b'm';
+
+
+
+# 一般控制字符
+CHR_RIS             = CHR_ESC + b'c';
+CHR_CRLF            = CHR_CR + CHR_LF;
+CHR_CRNUL           = CHR_CR + CHR_NUL;
+CHR_CLR             = CHR_RIS + CHR_CSI_CUP + CHR_CSI_ED2;
+CHRS_ESC_END        = b'@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_';
+CHRS_RETURN         = (CHR_CRLF, CHR_CRNUL, CHR_CR, CHR_LF);
 
 
 
