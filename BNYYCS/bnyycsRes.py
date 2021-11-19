@@ -50,6 +50,9 @@ class ResLoader:
     def getres(self, res, **params):
         return Resource(res = res, **params);
     
+    def fileres(self, res):
+        return '';
+    
     def nextres(self, res):
         return b'res::blank';
 
@@ -67,6 +70,9 @@ class ResLoader_BNYYCS(ResLoader):
     def getres(self, res, params = {}):
         return Res_SamplePage(res = res, params = params);
     
+    def fileres(self, res):
+        return '';
+
     def nextres(self, res):
         return b'res::blank';
 
