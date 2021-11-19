@@ -68,21 +68,28 @@ class ResLoader_BNYYCS(ResLoader):
         return;
     
     def getres(self, res, **params):
-        assert type(res) == bytes;
-        _s = splitres(res);
-        assert len(_s) >= 1;
-        if len(_s) >= 2 and _s[1] == b'blank':
-            return Resource(res = res, **params);
-        elif len(_s) >= 2 and _s[1] == b'refuse':
-            return Res_RefusePage(res = res, **params);
-        elif len(_s) >= 2 and _s[1] == b'front':
-            return Res_SamplePage(res = res, **params);
-        elif len(_s) >= 2 and _s[1] == b'sample':
-            return Res_SamplePage(res = res, **params);
-        elif len(_s) >= 2 and _s[1] == b'help':
-            return Res_TXTPage(res = res, **params);
-        else:
-            return Res_SamplePage(res = res, **params);
+        try:
+            assert type(res) == bytes;
+            _s = splitres(res);
+            assert len(_s) >= 1;
+            if len(_s) >= 2 and _s[1] == b'blank':
+                return Resource(res = res, **params);
+            elif len(_s) >= 2 and _s[1] == b'refuse':
+                return Res_RefusePage(res = res, **params);
+            elif len(_s) >= 2 and _s[1] == b'front':
+                return Res_SamplePage(res = res, **params);
+            elif len(_s) >= 2 and _s[1] == b'sample':
+                return Res_SamplePage(res = res, **params);
+            elif len(_s) >= 2 and _s[1] == b'help':
+                return Res_TXTPage(res = res, **params);
+            else:
+                return Res_SamplePage(res = res, **params);
+        except (AssertionError, OSError) as err:
+            return Res_RefusePage(res = b'res::refuse:Not_Accessable');
+        except Exception as err:
+            logger.error(err);
+            logger.critical('Res load failed with unexpected error.');
+        return;
     
     def fileres(self, res):
         return '';
