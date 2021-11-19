@@ -83,7 +83,7 @@ class ResLoader_BNYYCS(ResLoader):
             elif len(_s) >= 2 and _s[1] == b'help':
                 return Res_TXTPage(res = res, **params);
             else:
-                return Res_SamplePage(res = res, **params);
+                return Res_RefusePage(res = b'res::refuse:No_Page', **params);
         except (AssertionError, OSError) as err:
             return Res_RefusePage(res = b'res::refuse:Not_Accessable');
         except Exception as err:
