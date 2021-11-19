@@ -80,8 +80,8 @@ class Shell_BNYYCS(threading.Thread):
         self.rl = resloader();
         self.iq = inputqueue();
         self.params = shellparams;
-        self.user = usercontrol(params = self.params);
-        self.res = self.rl.getres(res = frontpage, params = self.params);
+        self.user = usercontrol(**self.params);
+        self.res = self.rl.getres(res = frontpage, **self.params);
         self.history = [self.res.res];
         self.timestamp = time.time();
         self._flagstop = False;
@@ -111,7 +111,7 @@ class Shell_BNYYCS(threading.Thread):
     # 访问当前资源逻辑上的下一条资源
     def cmdnext(self, *args):
         _res = self.rl.nextres(self.res.res);
-        self.res = self.rl.getres(res = _res, params = self.params);
+        self.res = self.rl.getres(res = _res, **self.params);
         self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];
@@ -124,7 +124,7 @@ class Shell_BNYYCS(threading.Thread):
             if type(arg) == bytes:
                 _respath += b'/' + arg;
         _res = b'res:' + _respath + b':help';
-        self.res = self.rl.getres(res = _res, params = self.params);
+        self.res = self.rl.getres(res = _res, **self.params);
         self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];
@@ -136,11 +136,11 @@ class Shell_BNYYCS(threading.Thread):
             _s = splitres(args[0]);
             if len(_s) >= 3 and _s[0] == b'res':
                 _res = args[0];
-                self.res = self.rl.getres(res = _res, params = self.params);
+                self.res = self.rl.getres(res = _res, **self.params);
                 self.history.append(self.res.res);
             elif len(_s) >= 2:
                 _res = b'res:' + args[0];
-                self.res = self.rl.getres(res = _res, params = self.params);
+                self.res = self.rl.getres(res = _res, **self.params);
                 self.history.append(self.res.res);
         if len(self.history) > self.maxhistory:
             self.history = self.history[1:];
@@ -188,7 +188,7 @@ class Shell_BNYYCS(threading.Thread):
             self.cmdput(*_args);
         else:
             try:
-                self.res.run(command, self.params);
+                self.res.run(command, *_args, **self.params);
             except Exception as err:
                 logger.error(err);
                 logger.error('User [%s] res run failed.' % self.name);
@@ -198,7 +198,7 @@ class Shell_BNYYCS(threading.Thread):
 
     def updateres(self, inps):
         try:
-            update = self.res.update(inps = inps, params = self.params);
+            update = self.res.update(inps = inps, **self.params);
         except Exception as err:
             logger.error(err);
             logger.error('User [%s] res update failed.' % self.name);
@@ -212,7 +212,7 @@ class Shell_BNYYCS(threading.Thread):
     def updateuser(self, inps):
         self.user.cmds = self.res.cmds;
         try:
-            update = self.user.update(inps = inps, params = self.params);
+            update = self.user.update(inps = inps, **self.params);
         except Exception as err:
             logger.error(err);
             logger.error('User [%s] update failed.' % self.name);
@@ -226,8 +226,8 @@ class Shell_BNYYCS(threading.Thread):
     def draw(self):
         _draw = (
             CHR_CLR +
-            CHR_CSI_CUP + self.res.draw(tab = self.user.tab, params = self.params) + CHR_T_RST +
-            CHRf_CSI_CUP(21, 1) + self.user.draw(res = self.res.res, params = self.params) + CHR_T_RST +
+            CHR_CSI_CUP + self.res.draw(tab = self.user.tab, **self.params) + CHR_T_RST +
+            CHRf_CSI_CUP(21, 1) + self.user.draw(res = self.res.res, **self.params) + CHR_T_RST +
             CHRf_CSI_CUP(24, 80)
         );
         self.conn.send(_draw);

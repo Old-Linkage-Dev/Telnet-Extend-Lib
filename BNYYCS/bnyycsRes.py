@@ -47,8 +47,8 @@ class ResLoader:
     def __init__(self) -> None:
         return;
     
-    def getres(self, res, params = {}):
-        return Resource(res = res, params = params);
+    def getres(self, res, **params):
+        return Resource(res = res, **params);
     
     def nextres(self, res):
         return b'res::blank';
@@ -76,39 +76,42 @@ class ResLoader_BNYYCS(ResLoader):
 
 
 
-# Resource(res:res, params)
+# Resource(res:res, **params)
 # 资源的基类，不在本类实现资源的具体形式，只定义公共接口；
 #   res         : res                                   // 实例化资源的res标识符；
 #   params      : dict                                  // Shell当前的环境参数，
 #
 # .res          : res                                   // 该资源的res标识符；
 # .cmds         : [bytes]                               // 该资源的待选指令；
-# .draw(tab:int, params)                                // 该资源的一次绘制，tab为绘制时的焦点位置，params是Shell当前的环境参数，
+# .draw(tab:int, **params)                              // 该资源的一次绘制，tab为绘制时的焦点位置，params是Shell当前的环境参数，
 #               : bytes                                 // 一个标准的res的draw应当返回一个可以实现画面绘制的bytes序列，
 #                                                       // 绘制的控制序列应当遵循常用的，如VT100的控制协议，和80x24的尺寸，
 #                                                       // 一个res应当只绘制屏幕上部80x20的区域，一方面这有利于避免绘制(80,24)后的换行推出屏幕，
 #                                                       // 另一方面因为Shell中可能会通过其他调用在画面下部绘制辅助内容，
 #                                                       // 绘制的过程应当使用相对坐标，绘制前系统会清屏，光标归位左上；
-# .run(cmd:bytes, *args, params)                        // 向资源发送一条指令执行，args是指令带入的参数
+# .run(cmd:bytes, *args, **params)                      // 向资源发送一条指令执行，args是指令带入的参数
 #               : none                                  // params是Shell当前的环境参数；
-# .update(inps:[bytes], params)                         // 向资源发送一次接受，params是Shell当前的环境参数，
+# .update(inps:[bytes], **params)                       // 向资源发送一次接受，params是Shell当前的环境参数，
 #               : bytes                                 // 返回update表示交由Shell执行一条指令；
 
 class Resource:
     
-    def __init__(self, res = b'res::blank', params = {}) -> None:
+    def __init__(self, res = b'res::blank', **params) -> None:
         self.res = res;
         self.cmds = [];
-        self.params = params;
+        self._params = params;
         return;
     
-    def draw(self, tab, params = {}):
+    def draw(self, tab, **params):
+        self._params.update(params);
         return;
     
-    def run(self, cmd, *args, params = {}):
+    def run(self, cmd, *args, **params):
+        self._params.update(params);
         return;
     
-    def update(self, recv, params = {}):
+    def update(self, recv, **params):
+        self._params.update(params);
         return;
 
 
@@ -117,13 +120,15 @@ class Resource:
 
 class Res_RefusePage(Resource):
 
-    def __init__(self, res = b'res::refuse', params = {}) -> None:
+    def __init__(self, res = b'res::refuse', **params) -> None:
         self.res = res;
         self.cmds = [b'back', b'quit'];
-        s = splitres(res);
-        self.reason = s[3] if len(s) >= 3 else b'';
+        self._params = params;
+        _s = splitres(res);
+        self.reason = _s[3] if len(_s) >= 3 else b'';
     
-    def draw(self, tab, params = {}):
+    def draw(self, tab, **params):
+        self._params.update(params);
         _reason = (self.reason if len(self.reason) <= 72 else self.reason[:69] + b'...') if self.reason else b'NO REASON PRESENTED';
         _lspace = b'%*s' % (math.ceil((72 - len(_reason)) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(_reason)) / 2), b'');
@@ -156,10 +161,12 @@ class Res_RefusePage(Resource):
         );
         return _ret
     
-    def update(self, inps = [], params = {}):
+    def update(self, inps = [], **params):
+        self._params.update(params);
         return;
 
-    def run(self, cmd, *args, params = {}):
+    def run(self, cmd, *args, **params):
+        self._params.update(params);
         return;
 
 
@@ -168,13 +175,15 @@ class Res_RefusePage(Resource):
 
 class Res_SamplePage(Resource):
 
-    def __init__(self, res = b'res::sample', params = {}) -> None:
+    def __init__(self, res = b'res::sample', **params) -> None:
         self.res = res;
         self.cmds = [b'test "this is a test"', b'help', b'back', b'quit'];
+        self._params = params;
         self._lastcmd = b'';
         return;
     
-    def draw(self, tab, params = {}):
+    def draw(self, tab, **params):
+        self._params.update(params);
         _lastcmd = (self._lastcmd if len(self._lastcmd) <= 72 else self._lastcmd[:69] + b'...') if self._lastcmd != b'' else b'NO CMD';
         _lspace = b'%*s' % (math.ceil((72 - len(_lastcmd)) / 2), b'');
         _rspace = b'%*s' % (math.floor((72 - len(_lastcmd)) / 2), b'');
@@ -213,11 +222,13 @@ class Res_SamplePage(Resource):
         );
         return _ret;
     
-    def update(self, inps = [], params = {}):
+    def update(self, inps = [], **params):
+        self._params.update(params);
         return;
 
-    def run(self, cmd, *args, params = {}):
+    def run(self, cmd, *args, **params):
         self._lastcmd = cmd;
+        self._params.update(params);
         return;
 
 
