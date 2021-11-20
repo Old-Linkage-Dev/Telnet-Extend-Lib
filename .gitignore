@@ -1,5 +1,6 @@
 
-.local/*
 *.log
 *__pycache__*
-./Prototype.BNYYCS/*
+
+.local/*
+.Prototype.BNYYCS/*
