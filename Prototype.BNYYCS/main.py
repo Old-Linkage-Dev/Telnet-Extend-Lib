@@ -52,7 +52,8 @@ serv = BNYYCS.BNYYCS(
     poolsize = 16,
     block = True,
     shellclass = BNYYCS.Shell_BNYYCS,
-    maxidle = 300
+    maxidle = 300,
+#    usercontrol = BNYYCS.User_BNYYCS_Light
 );
 
 #serv = BNYYCS.BNYYCS(host = "localhost");
