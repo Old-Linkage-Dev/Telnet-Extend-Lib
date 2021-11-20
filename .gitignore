@@ -2,4 +2,4 @@
 .local/*
 *.log
 *__pycache__*
-./Prototype.BNYYCS
+./Prototype.BNYYCS/*
