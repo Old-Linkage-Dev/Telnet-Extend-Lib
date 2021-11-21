@@ -8,7 +8,7 @@
 
 import logging;
 
-LOG_FILE = './TEL.log';
+LOG_FILE = './OLD_TEL.log';
 
 logger = logging.getLogger("TEL");
 logger.setLevel(logging.DEBUG);
