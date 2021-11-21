@@ -140,3 +140,75 @@ class Shell_Echo(threading.Thread):
             self.logger.debug(traceback.format_exc());
         self.logger.info('User [%s] ended.' % self.name);
         return;
+
+
+
+# CasterShell(conn, [logger], [name], [shell], [timeout])
+# 单个用户的Caster型shell控制线程，使用外置的shell的进程，
+# 将shell进程的标准输出投射至返回，实时主动更新；
+#   conn        : socket                                // 该用户的socket连接；
+#   logger      : logger                                // 该用户的日志实例；
+#   name        : str                                   // 该用户的线程名称；
+#   shell       : str                                   // 该用户的shell程序；
+#   timeout     : float                                 // 该用户的最长保持时间；
+
+class Shell_Caster(threading.Thread):
+
+    def __init__(self, conn, logger = logger, name = '', shell = '', timeout = 300) -> None:
+        super().__init__();
+        self.conn = conn;
+        self.logger = logger;
+        self.name = name if name else hex(id(self));
+        self.shell = shell;
+        self.timeout = timeout;
+        self.timestart = time.time();
+        self.proc = None;
+        self.pipe = None;
+        self._flagstop = False;
+        return;
+
+    def stop(self) -> None:
+        self._flagstop = True;
+    
+    def run(self) -> None:
+        self.logger.info('User [%s] running...' % self.name);
+        try:
+            self.proc = subprocess.Popen(
+                self.shell,
+                stdin = subprocess.DEVNULL,
+                stdout = subprocess.PIPE,
+                stderr = subprocess.DEVNULL,
+                shell=True
+            );
+            self.pipe = self.proc.stdout;
+        except Exception as err:
+            self.conn.close();
+            self.proc = None;
+            self.pipe = None;
+            self.logger.critical('User [%s] shell failed starting.');
+            self.logger.error(err);
+            self.logger.debug(traceback.format_exc());
+            return;
+        try:
+            s = bCHR_NUL;
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and self.proc.poll() == None and s != b'' and not self._flagstop:
+                s = self.pipe.read(1);
+                self.conn.send(s);
+            self.conn.shutdown(socket.SHUT_RDWR);
+            self.pipe.close();
+            self.proc.kill();
+            time.sleep(2);
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
+            self.conn.close();
+            self.pipe.close();
+            self.proc.kill();
+            self.logger.info('User [%s] connection aborted.' % self.name);
+        except Exception as err:
+            self.conn.close();
+            self.pipe.close();
+            self.proc.kill();
+            self.logger.critical('User [%s] shell failed.');
+            self.logger.error(err);
+            self.logger.debug(traceback.format_exc());
+        self.logger.info('User [%s] ended.' % self.name);
+        return;
