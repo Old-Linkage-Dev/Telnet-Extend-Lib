@@ -87,3 +87,56 @@ class Shell_BNYYCS(threading.Thread):
             self.logger.debug(traceback.format_exc());
         self.logger.info('User [%s] ended.' % self.name);
         return;
+
+
+
+# EchoShell(conn, [logger], [name], [timeout])
+# 单个用户的Echo型shell控制线程，
+# 将用户输入投射至返回；
+#   conn        : socket                                // 该用户的socket连接；
+#   logger      : logger                                // 该用户的日志实例；
+#   name        : str                                   // 该用户的线程名称；
+#   prt         : bool                                  // 该用户的键入是否记录log；
+#   timeout     : float                                 // 该用户的最长保持时间；
+
+class Shell_Echo(threading.Thread):
+
+    def __init__(self, conn, logger = logger, name = '', prt = False, timeout = 300) -> None:
+        super().__init__();
+        self.conn = conn;
+        self.logger = logger;
+        self.name = name if name else hex(id(self));
+        self.prt = prt;
+        self.timeout = timeout;
+        self.timestart = time.time();
+        self._flagstop = False;
+        return;
+
+    def stop(self) -> None:
+        self._flagstop = True;
+    
+    def run(self) -> None:
+        self.logger.info('User [%s] running...' % self.name);
+        try:
+            r = bCHR_NUL;
+            while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and r != b'' and not self._flagstop:
+                try:
+                    r = self.conn.recv(4096);
+                except BlockingIOError or TimeoutError:
+                    r = None;
+                if r:
+                    self.conn.send(r);
+                    if self.prt:
+                        self.logger.info('User [%s] input <%s>, utf-8 : <%s>' % (self.name, str(r), r.decode('utf-8')));
+            self.conn.shutdown(socket.SHUT_RDWR);
+            time.sleep(2);
+        except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
+            self.conn.close();
+            self.logger.info('User [%s] connection aborted.' % self.name);
+        except Exception as err:
+            self.conn.close();
+            self.logger.critical('User [%s] shell failed.');
+            self.logger.error(err);
+            self.logger.debug(traceback.format_exc());
+        self.logger.info('User [%s] ended.' % self.name);
+        return;
