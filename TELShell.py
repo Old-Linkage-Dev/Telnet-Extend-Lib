@@ -39,7 +39,7 @@ __all__ = [
 #   resload     : class(ResLoad)                        // 用于控制资源加载的类；
 #   frontpage   : res                                   // 首页的资源标识符res；
 
-class Shell_BNYYCS(threading.Thread):
+class TELShell(threading.Thread):
 
     def __init__(
         self,
@@ -99,7 +99,7 @@ class Shell_BNYYCS(threading.Thread):
 #   prt         : bool                                  // 该用户的键入是否记录log；
 #   timeout     : float                                 // 该用户的最长保持时间；
 
-class Shell_Echo(threading.Thread):
+class EchoShell(threading.Thread):
 
     def __init__(self, conn, logger = logger, name = '', prt = False, timeout = 300) -> None:
         super().__init__();
@@ -152,7 +152,7 @@ class Shell_Echo(threading.Thread):
 #   shell       : str                                   // 该用户的shell程序；
 #   timeout     : float                                 // 该用户的最长保持时间；
 
-class Shell_Caster(threading.Thread):
+class CasterShell(threading.Thread):
 
     def __init__(self, conn, logger = logger, name = '', shell = '', timeout = 300) -> None:
         super().__init__();
