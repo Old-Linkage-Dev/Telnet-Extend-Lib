@@ -19,7 +19,7 @@ import socket;
 
 from typing import *;
 
-from OLD import CLI;
+from .. import CLI;
 
 from . import TELFront;
 
