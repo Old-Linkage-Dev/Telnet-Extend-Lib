@@ -97,8 +97,25 @@ class Shell(threading.Thread):
                 },
                 force = True
             );
-            # TO DO HERE
-            # ......
+            recv = bCHR_NUL;
+            while time.time() - self.timestamp <= self.maxidle and recv != bCHR_NONE and not self._flagstop:
+                try:
+                    recv = self.conn.recv(4096);
+                except (BlockingIOError, TimeoutError):
+                    recv = None;
+                if recv:
+                    self.tf.recvpush(recv);
+                    for input in self.tf.recvpops():
+                        pass;
+                try:
+                    send = self.draw();
+                except Exception as err:
+                    send = None;
+                    self.logger.error('User [%s] draw failed.' % self.name);
+                    self.logger.error(err);
+                    self.logger.debug(traceback.format_exc());
+                if send:
+                    self.tf.send(send);
             self.conn.shutdown(socket.SHUT_RDWR);
             time.sleep(2);
         except (BrokenPipeError, ConnectionAbortedError, ConnectionResetError) as err:
