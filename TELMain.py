@@ -19,7 +19,7 @@ __all__ = [
 
 
 
-# TEL([host], [port], [backlog], [poolsize], [block], [logger], [shellclass], **kargs)
+# TEL([host], [port], [backlog], [poolsize], [block], [logger], [loggergetter], [shellclass], **kargs)
 # 描述该telnet网站的类，对该类的一个实例是一个telnet网站；
 #   host        : str                               // 网站地址；
 #   port        : int                               // 网站端口，默认为telnet的23端口；
@@ -30,6 +30,7 @@ __all__ = [
 #                                                   // 非阻塞下会明显增大轮询开销，
 #                                                   // 修改此属性会明显改变系统行为；
 #   logger      : logger                            // 网站的日志实例；
+#   loggergetter: function                          // 网站用户的日志实例
 #   shellclass  : class                             // 网站的Shell类型；
 #   **kargs     : **kargs                           // 其他参数，传递至各个Shell类；
 
@@ -49,6 +50,7 @@ class TEL:
         poolsize = 16,
         block = True,
         logger = logger,
+        loggergetter = loggergetter,
         shellclass = TELShell.Shell,
         **kwargs
     ) -> None:
@@ -58,6 +60,7 @@ class TEL:
         self.poolsize = poolsize;
         self.block = block;
         self.logger = logger;
+        self.loggergetter = loggergetter;
 
         self.shellclass = shellclass;
         self.kwargs = kwargs;
@@ -126,7 +129,11 @@ class TEL:
             connection, address = self.server.accept();
             self.release();
             if len(self.pool) < self.poolsize:
-                shell = self.shellclass(conn = connection, logger = self.logger, **self.kwargs);
+                if self.loggergetter == None:
+                    logger = self.loggergetter(name = ("User@%s:%s" % address));
+                else:
+                    logger = self.logger;
+                shell = self.shellclass(conn = connection, logger = logger, **self.kwargs);
                 user = (address, connection, shell);
                 self.pool.append(user);
                 shell.start();
