@@ -83,6 +83,15 @@ class TELShell(threading.Thread):
     def run(self) -> None:
         self.logger.info('User [%s] running...' % self.name);
         try:
+            self.tf.optionquery(
+                options = {
+                    self.tf.OP_ECHO     : self.tf.WILL | self.tf.DONT,
+                    self.tf.OP_SPRGA    : self.tf.WILL | self.tf.DO,
+                    self.tf.OP_NAWS     : self.tf.DO,
+                    self.tf.OP_LNMOD    : self.tf.DONT,
+                },
+                force = True
+            );
             # TO DO HERE
             # ......
             self.conn.shutdown(socket.SHUT_RDWR);
