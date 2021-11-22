@@ -17,6 +17,8 @@ import subprocess;
 import traceback;
 import socket;
 
+from . import TELFront as Front;
+
 from .TELLog import logger;
 from .CONSTS import *;
 
@@ -48,7 +50,12 @@ class TELShell(threading.Thread):
         name        = '',
         maxidle     = 900,
         maxhistory  = 8,
-        telfront    = None,
+        telfront    = Front.TELFront,
+        tfparam     = {
+            'code'      : 'ascii',
+            'autoecho'  : False,
+            'autoga'    : False,
+        },
         resload     = None,
         frontpage   = 'res::front',
     ) -> None:
@@ -58,9 +65,7 @@ class TELShell(threading.Thread):
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
         self.maxhistory = maxhistory;
-        self.resload = resload();
-        self.front = telfront();
-        self.res = self.resload.getres(res = frontpage, **self.params);
+        self.tf = telfront(conn = conn, **tfparam);
         self.history = [self.res.res];
         self.timestamp = time.time();
         self._flagstop = False;
