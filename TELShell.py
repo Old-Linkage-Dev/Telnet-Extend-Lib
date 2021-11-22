@@ -21,7 +21,7 @@ from typing import *;
 
 from OLD import CLI;
 
-from . import TELFront as Front;
+from . import TELFront;
 
 from .TELLog import logger;
 from .CONSTS import *;
@@ -54,7 +54,7 @@ class Shell(threading.Thread):
         name        = '',
         maxidle     = 900,
         maxhistory  = 8,
-        telfront    = Front.TELFront,
+        telfront    = TELFront.Front,
         tfparam     = {
             'code'      : 'ascii',
             'autoecho'  : False,

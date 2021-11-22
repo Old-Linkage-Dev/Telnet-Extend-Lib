@@ -8,7 +8,7 @@ import socket;
 import traceback;
 import threading;
 
-from . import TELShell as Shell;
+from . import TELShell;
 
 from .TELLog import logger;
 
@@ -40,7 +40,17 @@ __all__ = [
 
 class TEL:
 
-    def __init__(self, host = socket.gethostname(), port = 23, backlog = 16, poolsize = 16, block = True, logger = logger, shellclass = Shell.TELShell, **kwargs) -> None:
+    def __init__(
+        self,
+        host = socket.gethostname(),
+        port = 23,
+        backlog = 16,
+        poolsize = 16,
+        block = True,
+        logger = logger,
+        shellclass = TELShell.Shell,
+        **kwargs
+    ) -> None:
         self.host = host;
         self.port = port;
         self.backlog = backlog;

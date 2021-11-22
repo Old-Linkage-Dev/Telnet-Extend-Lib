@@ -18,7 +18,7 @@ __all__ = [
 
 
 
-class TELFront:
+class Front:
 
     WILL        = 0x0001;
     WONT        = 0x0002;
