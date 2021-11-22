@@ -9,8 +9,6 @@
 # 接收后级处理完成的信息，根据Telnet协商状态将传回信息编码传回；
 # 可尝试实现对用户字符集的自适应处理，；
 
-from typing import *;
-
 from .TELLog import logger;
 from .CONSTS import *;
 
@@ -79,7 +77,7 @@ class TELFront:
         else:
             return False;
 
-    def _deal(self, s:bytes) -> Tuple(bytes, bytes):
+    def _deal(self, s:bytes) -> tuple:
         if len(s) == 0:
             return b'', b'';
         elif s[:1] == TEL_IAC:
@@ -225,7 +223,7 @@ class TELFront:
         self._opst_sprga_autoga = val;
 
     @property
-    def windowsize(self) -> Tuple(int, int):
+    def windowsize(self) -> tuple:
         return self._opst_naws_windowsize;
     
     @property
@@ -239,7 +237,7 @@ class TELFront:
             _q = _q or (self.status[key] & self.WQUERYING) or (self.status[key] & self.DQUERYING);
         return _q;
 
-    def optionquery(self, options:Dict((bytes, int)), force:bool = False) -> None:
+    def optionquery(self, options:dict, force:bool = False) -> None:
         _s = b'';
         for key in options:
             if (
