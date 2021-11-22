@@ -13,7 +13,7 @@ from .TELLog import logger;
 from .CONSTS import *;
 
 __all__ = [
-    "TELFront"
+    "Front"
 ];
 
 
