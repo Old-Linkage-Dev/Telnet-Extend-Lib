@@ -195,7 +195,7 @@ class Front:
         if len(s) >= 5:
             if s == TELf_SB(TEL_OP_TTYP, TEL_OP_TTYP_SEND):
                 return TELf_SB(TEL_OP_TTYP, TEL_OP_TTYP_IS, self.TYPE);
-            elif s[:4] == TEL_CMD_SB + TEL_OP_TTYP + TEL_OP_TTYP_SEND and s[-2:] == TEL_CMD_SE:
+            elif s[:4] == TEL_CMD_SB + TEL_OP_TTYP + TEL_OP_TTYP_IS and s[-2:] == TEL_CMD_SE:
                 self._opst_ttyp_terminaltype = s[4:-2].decode(self.code, 'ignore');
         return b'';
 
