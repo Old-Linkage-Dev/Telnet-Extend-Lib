@@ -130,9 +130,9 @@ class TEL:
             self.release();
             if len(self.pool) < self.poolsize:
                 if self.loggergetter == None:
-                    logger = self.loggergetter(name = ("User@%s:%s" % address));
-                else:
                     logger = self.logger;
+                else:
+                    logger = self.loggergetter(name = ("User@%s:%s" % address));
                 shell = self.shellclass(conn = connection, logger = logger, **self.kwargs);
                 user = (address, connection, shell);
                 self.pool.append(user);
