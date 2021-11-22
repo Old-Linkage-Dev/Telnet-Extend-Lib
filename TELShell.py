@@ -58,7 +58,7 @@ class TELShell(threading.Thread):
             'autoecho'  : False,
             'autoga'    : False,
         },
-        resload     = CLI.Res,
+        resload     = CLI.ResLoad,
         rlparam     = {},
         frontpage   = 'res::front',
     ) -> None:
