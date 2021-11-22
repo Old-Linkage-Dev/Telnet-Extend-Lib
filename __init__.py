@@ -14,7 +14,7 @@ from .TELMain import *;
 from .TELShell import *;
 from .TELFront import *;
 
-from .TELLog import logger;
+from ..OLDLog import logger;
 
 
 
