@@ -24,6 +24,7 @@ __all__ = (
         "TELMain",
         "TELShell",
         "TELFront",
+        "logger",
     ] +
     TELMain.__all__ +
     TELShell.__all__ +
