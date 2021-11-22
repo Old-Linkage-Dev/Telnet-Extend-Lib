@@ -27,14 +27,14 @@ from .TELLog import logger;
 from .CONSTS import *;
 
 __all__ = [
-    "TELShell",
+    "Shell",
     "EchoShell",
     "CasterShell"
 ];
 
 
 
-# TELShell(conn, [logger], [name], [maxidle], [...])
+# Shell(conn, [logger], [name], [maxidle], [...])
 # 单个用户的标准TEL型shell控制线程，实例化Res类作为交互对象；
 #   conn        : socket                                // 该用户的socket连接；
 #   logger      : logger                                // 该用户的日志实例；
@@ -45,7 +45,7 @@ __all__ = [
 #   resload     : class(ResLoad)                        // 用于控制资源加载的类；
 #   frontpage   : res                                   // 首页的资源标识符res；
 
-class TELShell(threading.Thread):
+class Shell(threading.Thread):
 
     def __init__(
         self,
