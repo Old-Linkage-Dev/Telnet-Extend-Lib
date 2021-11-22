@@ -73,7 +73,7 @@ class Shell(threading.Thread):
         self.tf = telfront(conn = conn, **tfparam);
         self.rl = resload(**rlparam);
         self.res = self.rl.getres(res = frontpage);
-        self.history = [self.res.res];
+        self.history = [frontpage];
         self.timestamp = time.time();
         self._flagstop = False;
         return;
