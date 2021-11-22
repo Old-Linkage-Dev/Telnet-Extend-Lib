@@ -26,10 +26,8 @@ from .CONSTS import *;
 
 __all__ = [
     "TELShell",
-    "Shell_Refuse",
-    "Shell_Echo",
-    "Shell_Interactor",
-    "Shell_Caster"
+    "EchoShell",
+    "CasterShell"
 ];
 
 # TELShell(conn, [logger], [name], [maxidle], [...])
