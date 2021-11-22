@@ -247,13 +247,13 @@ class Front:
                 not (key in self.status and self.status[key] & self.WQUERYING)
             ):
                 _s += TEL_CMD_WILL + key;
-                self.status[key] |= self.WQUERYING;
+                self.status[key] = (self.status[key] | self.WQUERYING) if (key in self.status) else self.WQUERYING;
             elif (options[key] & self.WILL) and force:
                 _s += TEL_CMD_WILL + key;
-                self.status[key] |= self.WQUERYING;
+                self.status[key] = (self.status[key] | self.WQUERYING) if (key in self.status) else self.WQUERYING;
             elif (options[key] & self.WONT) and force:
                 _s += TEL_CMD_WONT + key;
-                self.status[key] |= self.WQUERYING;
+                self.status[key] = (self.status[key] | self.WQUERYING) if (key in self.status) else self.WQUERYING;
             if (
                 (key in self.SUPPORTED) and
                 (options[key] & self.DO) and
@@ -261,13 +261,13 @@ class Front:
                 not (key in self.status and self.status[key] & self.DQUERYING)
             ):
                 _s += TEL_CMD_DO + key;
-                self.status[key] |= self.DQUERYING;
+                self.status[key] = (self.status[key] | self.DQUERYING) if (key in self.status) else self.DQUERYING;
             elif (options[key] & self.DO) and force:
                 _s += TEL_CMD_DO + key;
-                self.status[key] |= self.DQUERYING;
+                self.status[key] = (self.status[key] | self.DQUERYING) if (key in self.status) else self.DQUERYING;
             elif (options[key] & self.DONT) and force:
                 _s += TEL_CMD_DONT + key;
-                self.status[key] |= self.DQUERYING;
+                self.status[key] = (self.status[key] | self.DQUERYING) if (key in self.status) else self.DQUERYING;
             if key == TEL_OP_TTYP and options[key] & self.DO:
                 _s += TEL_CMD_SB + TEL_OP_TTYP + TEL_OP_TTYP_SEND + TEL_CMD_SE;
         self.conn.send(_s);
