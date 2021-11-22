@@ -70,7 +70,7 @@ class Shell(threading.Thread):
         self.name = name if name else hex(id(self));
         self.maxidle = maxidle;
         self.maxhistory = maxhistory;
-        self.tf = telfront(conn = conn, **tfparam);
+        self.tf = telfront(conn = conn, logger = logger, **tfparam);
         self.rl = resload(**rlparam);
         self.res = self.rl.getres(res = frontpage);
         self.history = [frontpage];

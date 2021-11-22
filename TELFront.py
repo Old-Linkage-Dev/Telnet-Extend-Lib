@@ -37,9 +37,10 @@ class Front:
 
     TYPE = 'TEL FRONT';
 
-    def __init__(self, conn, code = 'ascii', autoecho = False, autoga = False) -> None:
+    def __init__(self, conn, logger = logger, code = 'ascii', autoecho = False, autoga = False) -> None:
         self.code = code;
         self.conn = conn;
+        self.logger = logger;
         self.status = {};
         self._recvbuff = b'';
         self._recvqueue = [];
