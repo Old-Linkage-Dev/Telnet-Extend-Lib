@@ -82,6 +82,9 @@ class Shell(threading.Thread):
         self._flagstop = True;
         return;
     
+    def draw(self) -> str:
+        return '';
+
     def run(self) -> None:
         self.logger.info('User [%s] running...' % self.name);
         try:
