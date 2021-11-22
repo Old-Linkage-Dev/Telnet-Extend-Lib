@@ -10,7 +10,7 @@ import logging;
 
 LOG_FILE = './OLD_TEL.log';
 
-logger = logging.getLogger("TEL");
+logger = logging.getLogger("OLD.TEL");
 logger.setLevel(logging.DEBUG);
 
 _logger_formatter_scrn = logging.Formatter(fmt='\033[0m%(asctime)s \033[1;34m[%(levelname)s]\033[35m[%(name)s]\033[33m >> \033[0m%(message)s', datefmt='%H:%M');
