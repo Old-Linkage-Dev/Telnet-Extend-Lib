@@ -122,7 +122,7 @@ class EchoShell(threading.Thread):
             while (self.timeout < 0 or time.time() - self.timestart <= self.timeout) and r != b'' and not self._flagstop:
                 try:
                     r = self.conn.recv(4096);
-                except BlockingIOError or TimeoutError:
+                except (BlockingIOError, TimeoutError):
                     r = None;
                 if r:
                     self.conn.send(r);
