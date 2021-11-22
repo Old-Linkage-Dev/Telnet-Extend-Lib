@@ -145,11 +145,13 @@ class Front:
                     self.status[s[2:3]] &= ~ self.DONT;
                     self.status[s[2:3]] &= ~ self.DQUERYING;
                 elif s[2:3] in self.SUPPORTED:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] |= self.DO;
                     self.status[s[2:3]] &= ~ self.DONT;
                     self.status[s[2:3]] &= ~ self.DQUERYING;
                     return TEL_CMD_DO + s[2:3];
                 else:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] &= ~ self.DO;
                     self.status[s[2:3]] |= self.DONT;
                     self.status[s[2:3]] &= ~ self.DQUERYING;
@@ -160,6 +162,7 @@ class Front:
                     self.status[s[2:3]] |= self.DONT;
                     self.status[s[2:3]] &= ~ self.DQUERYING;
                 else:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] &= ~ self.DO;
                     self.status[s[2:3]] |= self.DONT;
                     self.status[s[2:3]] &= ~ self.DQUERYING;
@@ -170,11 +173,13 @@ class Front:
                     self.status[s[2:3]] &= ~ self.WONT;
                     self.status[s[2:3]] &= ~ self.WQUERYING;
                 elif s[2:3] in self.SUPPORTED:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] |= self.WILL;
                     self.status[s[2:3]] &= ~ self.WONT;
                     self.status[s[2:3]] &= ~ self.WQUERYING;
                     return TEL_CMD_WILL + s[2:3];
                 else:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] &= ~ self.WILL;
                     self.status[s[2:3]] |= self.WONT;
                     self.status[s[2:3]] &= ~ self.WQUERYING;
@@ -185,6 +190,7 @@ class Front:
                     self.status[s[2:3]] |= self.WONT;
                     self.status[s[2:3]] &= ~ self.WQUERYING;
                 else:
+                    self.status[s[2:3]] = self.status[s[2:3]] if (s[2:3] in self.status) else 0;
                     self.status[s[2:3]] &= ~ self.WILL;
                     self.status[s[2:3]] |= self.WONT;
                     self.status[s[2:3]] &= ~ self.WQUERYING;
