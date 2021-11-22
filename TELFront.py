@@ -286,7 +286,8 @@ class Front:
         _r = bCHR_NUL;
         while _r:
             _r, self._recvbuff = self._deal(self._recvbuff);
-            _rs.append(_r);
+            if _r:
+                _rs.append(_r);
         _s = b'';
         if not self._opst_sprga_dosprga and self._opst_sprga_autoga:
             _s += TEL_CMD_GA;
