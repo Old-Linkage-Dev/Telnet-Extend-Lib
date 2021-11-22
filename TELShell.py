@@ -93,6 +93,7 @@ class Shell(threading.Thread):
                     self.tf.OP_ECHO     : self.tf.WILL | self.tf.DONT,
                     self.tf.OP_SPRGA    : self.tf.WILL | self.tf.DO,
                     self.tf.OP_NAWS     : self.tf.DO,
+                    self.tf.OP_TTYP     : self.tf.DO,
                     self.tf.OP_LNMOD    : self.tf.DONT,
                 },
                 force = True
