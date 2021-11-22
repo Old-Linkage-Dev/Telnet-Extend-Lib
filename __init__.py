@@ -38,7 +38,7 @@ __credits__ = ["Tarcadia", "Mundanity-fc"];
 __license__ = "GNU GENERAL PUBLIC LICENSE VERSION 3";
 __version__ = "ProtoType 1.0.0";
 
-logger.info('OLD.CLI Mod Loaded.');
+logger.info('OLD.TEL Mod Loaded.');
 logger.info('Locense: %s' % __license__);
 logger.info('Version: %s' % __version__);
 logger.info('Find on: %s' % __url__);
