@@ -10,7 +10,8 @@ import threading;
 
 from . import TELShell;
 
-from .TELLog import logger;
+from ..OLDLog import logger;
+from ..OLDLog import loggergetter;
 
 __all__ = [
     "TEL"

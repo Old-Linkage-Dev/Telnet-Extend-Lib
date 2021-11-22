@@ -9,7 +9,7 @@
 # 接收后级处理完成的信息，根据Telnet协商状态将传回信息编码传回；
 # 可尝试实现对用户字符集的自适应处理，；
 
-from .TELLog import logger;
+from ..OLDLog import logger;
 from .CONSTS import *;
 
 __all__ = [

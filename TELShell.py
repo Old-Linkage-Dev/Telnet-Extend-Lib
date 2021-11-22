@@ -23,7 +23,7 @@ from .. import CLI;
 
 from . import TELFront;
 
-from .TELLog import logger;
+from ..OLDLog import logger;
 from .CONSTS import *;
 
 __all__ = [
