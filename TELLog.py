@@ -18,7 +18,7 @@ _logger_ch_scrn = logging.StreamHandler();
 _logger_ch_scrn.setLevel(logging.INFO);
 _logger_ch_scrn.setFormatter(_logger_formatter_scrn);
 
-_logger_formatter_file = logging.Formatter(fmt='[%(asctime)s][%(levelname)s] >> %(message)s', datefmt='%Y-%m-%d-%H:%M:%S');
+_logger_formatter_file = logging.Formatter(fmt='[%(asctime)s][%(levelname)s][%(name)s] >> %(message)s', datefmt='%Y-%m-%d-%H:%M:%S');
 _logger_ch_file = logging.FileHandler(LOG_FILE, encoding = 'utf8');
 _logger_ch_file.setLevel(logging.DEBUG);
 _logger_ch_file.setFormatter(_logger_formatter_file);
@@ -35,7 +35,7 @@ def loggergetter(name = "TEL_loggergetted"):
     _logger_ch_scrn.setLevel(logging.INFO);
     _logger_ch_scrn.setFormatter(_logger_formatter_scrn);
 
-    _logger_formatter_file = logging.Formatter(fmt='[%(asctime)s][%(levelname)s] >> %(message)s', datefmt='%Y-%m-%d-%H:%M:%S');
+    _logger_formatter_file = logging.Formatter(fmt='[%(asctime)s][%(levelname)s][%(name)s] >> %(message)s', datefmt='%Y-%m-%d-%H:%M:%S');
     _logger_ch_file = logging.FileHandler(LOG_FILE, encoding = 'utf8');
     _logger_ch_file.setLevel(logging.DEBUG);
     _logger_ch_file.setFormatter(_logger_formatter_file);
