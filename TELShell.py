@@ -17,6 +17,8 @@ import subprocess;
 import traceback;
 import socket;
 
+from typing import *;
+
 from OLD import CLI;
 
 from . import TELFront as Front;
